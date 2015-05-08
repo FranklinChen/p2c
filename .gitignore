@@ -1,0 +1,17 @@
+*.o
+*.a
+examples/*.c
+examples/basic
+examples/cref
+examples/e
+examples/fact
+examples/self
+examples/*.out
+home
+p2c
+p2cc
+src/makeproto
+src/p2c
+src/p2c.man.inst
+src/p2cc
+src/parse.c.orig
