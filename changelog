@@ -1,0 +1,126 @@
+p2c (1.21alpha2-3) unstable; urgency=low
+
+  * QA upload
+  * Fully reworked debian/rules using dh 7 (Closes: #437730)
+  * Rename built-in getline() function (Closes: #552828)
+  * Add 'Old Changelog:' tag to fix syntax-error-in-debian-changelog
+
+ -- Ruben Molina <rmolina@udea.edu.co>  Thu, 19 Nov 2009 20:24:41 -0500
+
+p2c (1.21alpha2-2.1) unstable; urgency=low
+
+  * Non-maintainer upload (0-day)
+  * Applied patch by Peter De Wachter that fixes double memory free()'s
+    (Closes: #305412, #307706)
+
+ -- Roland Stigge <stigge@antcom.de>  Thu,  5 May 2005 16:04:37 +0200
+
+p2c (1.21alpha2-2) unstable; urgency=low
+
+  * Added debhelper to build-depends, closes: #190499.
+  * Updated package standards.
+
+ -- Josip Rodin <joy-packages@debian.org>  Sat, 16 Aug 2003 13:02:10 +0200
+
+p2c (1.21alpha2-1) unstable; urgency=low
+
+  * New upstream version. Although it is marked as "alpha", it has been
+    made in 1993, so... :) (closes: #39400)
+  * Updated for Policy 3.x, rewrote most of debian/* and made a better
+    src/Makefile patch.
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Sat, 11 Sep 1999 23:34:19 +0200
+
+p2c (1.20-3) unstable; urgency=low
+
+  * Removed `-m486 -fomit-frame-pointer' from the gcc flags, since ix86
+    doesn't need it and it bugs m68k (and other ports).
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Thu,  7 Jan 1999 19:01:32 +0100
+
+p2c (1.20-2) unstable; urgency=low
+
+  * Fixed the FSF address in copyright file
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Tue, 29 Dec 1998 21:13:52 +0100
+
+p2c (1.20-1) unstable; urgency=low
+
+  * Initial Release for potato (2.2)
+  * Converted to new packaging format/standards
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Mon, 28 Dec 1998 18:14:23 +0100
+
+Old Changelog:
+
+Changes by Andrew Howell <andrew@it.com.au>:
+
+1.20-2:
+ 951123
+ * Converted to ELF.
+
+1.20-1:
+ * added Debian GNU/Linux package maintenance system files
+p2c (1.21alpha2-3) unstable; urgency=low
+
+  * QA upload
+  * Fully reworked debian/rules using dh 7 (Closes: #437730)
+  * Rename built-in getline() function (Closes: #552828)
+  * Add 'Old Changelog:' tag to fix syntax-error-in-debian-changelog
+
+ -- Ruben Molina <rmolina@udea.edu.co>  Thu, 19 Nov 2009 20:24:41 -0500
+
+p2c (1.21alpha2-2.1) unstable; urgency=low
+
+  * Non-maintainer upload (0-day)
+  * Applied patch by Peter De Wachter that fixes double memory free()'s
+    (Closes: #305412, #307706)
+
+ -- Roland Stigge <stigge@antcom.de>  Thu,  5 May 2005 16:04:37 +0200
+
+p2c (1.21alpha2-2) unstable; urgency=low
+
+  * Added debhelper to build-depends, closes: #190499.
+  * Updated package standards.
+
+ -- Josip Rodin <joy-packages@debian.org>  Sat, 16 Aug 2003 13:02:10 +0200
+
+p2c (1.21alpha2-1) unstable; urgency=low
+
+  * New upstream version. Although it is marked as "alpha", it has been
+    made in 1993, so... :) (closes: #39400)
+  * Updated for Policy 3.x, rewrote most of debian/* and made a better
+    src/Makefile patch.
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Sat, 11 Sep 1999 23:34:19 +0200
+
+p2c (1.20-3) unstable; urgency=low
+
+  * Removed `-m486 -fomit-frame-pointer' from the gcc flags, since ix86
+    doesn't need it and it bugs m68k (and other ports).
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Thu,  7 Jan 1999 19:01:32 +0100
+
+p2c (1.20-2) unstable; urgency=low
+
+  * Fixed the FSF address in copyright file
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Tue, 29 Dec 1998 21:13:52 +0100
+
+p2c (1.20-1) unstable; urgency=low
+
+  * Initial Release for potato (2.2)
+  * Converted to new packaging format/standards
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Mon, 28 Dec 1998 18:14:23 +0100
+
+Old Changelog:
+
+Changes by Andrew Howell <andrew@it.com.au>:
+
+1.20-2:
+ 951123
+ * Converted to ELF.
+
+1.20-1:
+ * added Debian GNU/Linux package maintenance system files

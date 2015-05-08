@@ -1,0 +1,220 @@
+Description: Rename buit-in getline function
+Bug-Debian: http://bugs.debian.org/552828
+Author: Ruben Molina <rmolina@udea.edu.co>
+--- p2c-1.21alpha2.orig/src/lex.c
++++ p2c-1.21alpha2/src/lex.c
+@@ -1044,7 +1044,7 @@
+ 
+ 
+ 
+-void getline()
++void mygetline()
+ {
+     char *cp, *cp2;
+ 
+@@ -1071,7 +1071,7 @@
+ 			infname = stralloc(cp);
+ 			infname[cp2 - cp] = 0;
+ 		    }
+-		    getline();
++		    mygetline();
+ 		    return;
+ 		}
+ 		if (copysource && *inbuf) {
+@@ -1088,7 +1088,7 @@
+                     fprintf(stderr, "\n");
+                 if (inputkind == INP_INCFILE) {
+                     pop_input();
+-                    getline();
++                    mygetline();
+                 } else
+                     strcpy(inbuf, "\001");
+             }
+@@ -1179,7 +1179,7 @@
+         infname = fname;
+         inf_lnum = 0;
+     } else
+-        inf_lnum--;     /* adjust for extra getline() */
++        inf_lnum--;     /* adjust for extra mygetline() */
+     *inbuf = 0;
+     inbufptr = inbuf;
+     gettok();
+@@ -2367,7 +2367,7 @@
+ 		else
+ 		    commentline(CMT_POST);
+ 		trailing = 0;
+-                getline();
++                mygetline();
+ 		i = 0;
+ 		for (;;) {
+ 		    if (*inbufptr == ' ') {
+@@ -2419,7 +2419,7 @@
+         if (isspace(*inbufptr)) {
+             inbufptr++;
+         } else if (!*inbufptr) {
+-            getline();
++            mygetline();
+         } else if (*inbufptr == '{') {
+             inbufptr++;
+             comment(0);
+@@ -2513,7 +2513,7 @@
+         switch (*inbufptr++) {
+ 
+             case 0:
+-                getline();
++                mygetline();
+                 break;
+ 
+             case ' ':
+@@ -2765,7 +2765,7 @@
+             case 0:
+ 	        if (commenting_flag)
+ 		    saveinputcomment(inbufptr-1);
+-                getline();
++                mygetline();
+ 		cp = curtokbuf;
+ 		for (;;) {
+ 		    inbufindent = 0;
+@@ -2782,7 +2782,7 @@
+ 		    }
+ 		    if (!*inbufptr && !commenting_flag) {   /* blank line */
+ 			*cp++ = '\001';
+-			getline();
++			mygetline();
+ 		    } else
+ 			break;
+ 		}
+@@ -2797,10 +2797,10 @@
+ 		*cp++ = '\001';
+ 		*cp++ = '\014';
+ 		if (!*inbufptr && !commenting_flag) {
+-		    getline();
++		    mygetline();
+ 		    while (!*inbufptr) {
+ 			*cp++ = '\001';
+-			getline();
++			mygetline();
+ 		    }
+ 		}
+ 		*cp = 0;
+--- p2c-1.21alpha2.orig/src/parse.c
++++ p2c-1.21alpha2/src/parse.c
+@@ -5071,7 +5071,7 @@
+ 	out_include(fname, 1);
+     outsection(majorspace);
+     pop_input();
+-    getline();
++    mygetline();
+     gettok();
+ }
+ 
+Description: Rename buit-in getline function
+Bug-Debian: http://bugs.debian.org/552828
+Author: Ruben Molina <rmolina@udea.edu.co>
+--- p2c-1.21alpha2.orig/src/lex.c
++++ p2c-1.21alpha2/src/lex.c
+@@ -1044,7 +1044,7 @@
+ 
+ 
+ 
+-void getline()
++void mygetline()
+ {
+     char *cp, *cp2;
+ 
+@@ -1071,7 +1071,7 @@
+ 			infname = stralloc(cp);
+ 			infname[cp2 - cp] = 0;
+ 		    }
+-		    getline();
++		    mygetline();
+ 		    return;
+ 		}
+ 		if (copysource && *inbuf) {
+@@ -1088,7 +1088,7 @@
+                     fprintf(stderr, "\n");
+                 if (inputkind == INP_INCFILE) {
+                     pop_input();
+-                    getline();
++                    mygetline();
+                 } else
+                     strcpy(inbuf, "\001");
+             }
+@@ -1179,7 +1179,7 @@
+         infname = fname;
+         inf_lnum = 0;
+     } else
+-        inf_lnum--;     /* adjust for extra getline() */
++        inf_lnum--;     /* adjust for extra mygetline() */
+     *inbuf = 0;
+     inbufptr = inbuf;
+     gettok();
+@@ -2367,7 +2367,7 @@
+ 		else
+ 		    commentline(CMT_POST);
+ 		trailing = 0;
+-                getline();
++                mygetline();
+ 		i = 0;
+ 		for (;;) {
+ 		    if (*inbufptr == ' ') {
+@@ -2419,7 +2419,7 @@
+         if (isspace(*inbufptr)) {
+             inbufptr++;
+         } else if (!*inbufptr) {
+-            getline();
++            mygetline();
+         } else if (*inbufptr == '{') {
+             inbufptr++;
+             comment(0);
+@@ -2513,7 +2513,7 @@
+         switch (*inbufptr++) {
+ 
+             case 0:
+-                getline();
++                mygetline();
+                 break;
+ 
+             case ' ':
+@@ -2765,7 +2765,7 @@
+             case 0:
+ 	        if (commenting_flag)
+ 		    saveinputcomment(inbufptr-1);
+-                getline();
++                mygetline();
+ 		cp = curtokbuf;
+ 		for (;;) {
+ 		    inbufindent = 0;
+@@ -2782,7 +2782,7 @@
+ 		    }
+ 		    if (!*inbufptr && !commenting_flag) {   /* blank line */
+ 			*cp++ = '\001';
+-			getline();
++			mygetline();
+ 		    } else
+ 			break;
+ 		}
+@@ -2797,10 +2797,10 @@
+ 		*cp++ = '\001';
+ 		*cp++ = '\014';
+ 		if (!*inbufptr && !commenting_flag) {
+-		    getline();
++		    mygetline();
+ 		    while (!*inbufptr) {
+ 			*cp++ = '\001';
+-			getline();
++			mygetline();
+ 		    }
+ 		}
+ 		*cp = 0;
+--- p2c-1.21alpha2.orig/src/parse.c
++++ p2c-1.21alpha2/src/parse.c
+@@ -5071,7 +5071,7 @@
+ 	out_include(fname, 1);
+     outsection(majorspace);
+     pop_input();
+-    getline();
++    mygetline();
+     gettok();
+ }
+ 

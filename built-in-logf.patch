@@ -1,0 +1,402 @@
+Description: Rename built-in function ‘logf’ declared as non-function
+Author: Ruben Molina <rmolina@udea.edu.co>
+--- p2c-1.21alpha2.orig/src/trans.h
++++ p2c-1.21alpha2/src/trans.h
+@@ -1773,7 +1773,7 @@
+ 
+ extern char *infname, *outfname, *codefname, *hdrfname;
+ extern char *requested_module;
+-extern FILE *inf, *outf, *codef, *hdrf, *logf;
++extern FILE *inf, *outf, *codef, *hdrf, *mylogf;
+ extern short setup_complete, found_module;
+ extern short regression, verbose, conserve_mem;
+ extern int inf_lnum, inf_ltotal;
+--- p2c-1.21alpha2.orig/src/trans.c
++++ p2c-1.21alpha2/src/trans.c
+@@ -588,17 +588,17 @@
+     if (!name)
+ 	name = format_s("%s.log", codefname);
+     saveoldfile(name);
+-    logf = fopen(name, "w");
+-    if (logf) {
+-	fprintf(logf, "\nTranslation of %s to %s by p2c %s\n",
++    mylogf = fopen(name, "w");
++    if (mylogf) {
++	fprintf(mylogf, "\nTranslation of %s to %s by p2c %s\n",
+ 		infname, codefname, P2C_VERSION);
+-	fprintf(logf, "Translated");
++	fprintf(mylogf, "Translated");
+ 	uname = getenv("USER");
+ 	if (uname)
+-	    fprintf(logf, " by %s", uname);
++	    fprintf(mylogf, " by %s", uname);
+ 	time(&starting_time);
+-	fprintf(logf, " on %s", ctime(&starting_time));
+-	fprintf(logf, "\n\n");
++	fprintf(mylogf, " on %s", ctime(&starting_time));
++	fprintf(mylogf, "\n\n");
+     } else {
+ 	perror(name);
+ 	verbose = 0;
+@@ -610,18 +610,18 @@
+ {
+     long ending_time;
+ 
+-    if (logf) {
+-	fprintf(logf, "\n\n");
++    if (mylogf) {
++	fprintf(mylogf, "\n\n");
+ #if defined(unix) || defined(__unix)
+-	fprintf(logf, "Total memory used: %ld bytes.\n", (long)sbrk(0));
++	fprintf(mylogf, "Total memory used: %ld bytes.\n", (long)sbrk(0));
+ #endif
+ 	time(&ending_time);
+-	fprintf(logf, "Processed %d source lines in %ld:%ld seconds.\n",
++	fprintf(mylogf, "Processed %d source lines in %ld:%ld seconds.\n",
+ 		inf_ltotal,
+ 		(ending_time - starting_time) / 60,
+ 		(ending_time - starting_time) % 60);
+-	fprintf(logf, "\n\nTranslation completed on %s", ctime(&ending_time));
+-	fclose(logf);
++	fprintf(mylogf, "\n\nTranslation completed on %s", ctime(&ending_time));
++	fclose(mylogf);
+     }
+ }
+ 
+@@ -949,7 +949,7 @@
+         setbuf(codef, NULL);      /* for debugging */
+     outf = codef;
+     outf_lnum = 1;
+-    logf = NULL;
++    mylogf = NULL;
+     if (verbose)
+ 	openlogfile();
+     setup_complete = 0;
+--- p2c-1.21alpha2.orig/src/out.c
++++ p2c-1.21alpha2/src/out.c
+@@ -1194,7 +1194,7 @@
+ 			    " seconds, %ld tries on line %d [251]", alts, outf_lnum);
+ 		    note(outbuf);
+ 		} else if (verbose) {
+-		    fprintf(logf, "%s, %d/%d: Line breaker spent %ld tries\n",
++		    fprintf(mylogf, "%s, %d/%d: Line breaker spent %ld tries\n",
+ 			    infname, inf_lnum, outf_lnum, alts);
+ 		}
+ 		if (testinglinebreaker)
+--- p2c-1.21alpha2.orig/src/comment.c
++++ p2c-1.21alpha2/src/comment.c
+@@ -299,7 +299,7 @@
+ 	    printf("\"%s\", line %d,%d: %s\n", infname, inf_lnum, outf_lnum, msg);
+     }
+     if (verbose)
+-	fprintf(logf, "%s:%d:%d: %s\n", infname, inf_lnum, outf_lnum, msg);
++	fprintf(mylogf, "%s:%d:%d: %s\n", infname, inf_lnum, outf_lnum, msg);
+     if (notephase == 2 || regression)
+ 	prefix = format_s("\004 p2c: %s:", infname);
+     else
+--- p2c-1.21alpha2.orig/src/lex.c
++++ p2c-1.21alpha2/src/lex.c
+@@ -520,7 +520,7 @@
+ 	    if (outf != stdout)
+ 		printf("Translation aborted: Too many errors.\n");
+ 	    if (verbose)
+-		fprintf(logf, "Translation aborted: Too many errors.\n");
++		fprintf(mylogf, "Translation aborted: Too many errors.\n");
+ 	    closelogfile();
+ 	    exit_failure();
+ 	}
+@@ -541,9 +541,9 @@
+         printf("Translation aborted.\n");
+     }
+     if (verbose) {
+-	fprintf(logf, "%s:%d:%d: %s\n",
++	fprintf(mylogf, "%s:%d:%d: %s\n",
+ 		infname, inf_lnum, outf_lnum, msg);
+-	fprintf(logf, "Translation aborted.\n");
++	fprintf(mylogf, "Translation aborted.\n");
+     }
+     closelogfile();
+     exit_failure();
+@@ -562,7 +562,7 @@
+ {
+     if (checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted warning: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted warning: %s\n",
+ 		    infname, inf_lnum, outf_lnum, msg);
+ 	return;
+     }
+@@ -577,7 +577,7 @@
+ {
+     if (checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted internal error in %s: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted internal error in %s: %s\n",
+ 		    infname, inf_lnum, outf_lnum, proc, msg);
+ 	return;
+     }
+@@ -596,7 +596,7 @@
+ {
+     if (blockkind == TOK_IMPORT || checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted note: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted note: %s\n",
+ 		    infname, inf_lnum, outf_lnum, msg);
+ 	return;
+     }
+@@ -612,12 +612,12 @@
+ {
+     if (blockkind == TOK_IMPORT || checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted end-note: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted end-note: %s\n",
+ 		    infname, inf_lnum, outf_lnum, msg);
+ 	return;
+     }
+     if (verbose)
+-	fprintf(logf, "%s:%d:%d: Recorded end-note: %s\n",
++	fprintf(mylogf, "%s:%d:%d: Recorded end-note: %s\n",
+ 		infname, inf_lnum, outf_lnum, msg);
+     (void) strlist_add(&endnotelist, msg);
+ }
+@@ -1327,7 +1327,7 @@
+ 	    else
+ 		printf("Reading include file \"%s\"\n", fn);
+ 	if (verbose)
+-	    fprintf(logf, "Reading include file \"%s\"\n", fn);
++	    fprintf(mylogf, "Reading include file \"%s\"\n", fn);
+         if (expandincludes == 0) {
+             push_input_file(fp, fn, 2);
+             curtok = TOK_INCLUDE;
+--- p2c-1.21alpha2.orig/src/parse.c
++++ p2c-1.21alpha2/src/parse.c
+@@ -4392,7 +4392,7 @@
+     long saveserial;
+ 
+     if (verbose)
+-	fprintf(logf, "%s, %d/%d: Translating %s (in %s)\n",
++	fprintf(mylogf, "%s, %d/%d: Translating %s (in %s)\n",
+ 		infname, inf_lnum, outf_lnum,
+ 		curctx->name, curctx->ctx->name);
+     notephase = 1;
+@@ -5479,8 +5479,8 @@
+     if (!fp) {
+         if (need)
+             perror(infnbuf);
+-	if (logf)
+-	    fprintf(logf, "(Unable to open search file \"%s\")\n", infnbuf);
++	if (mylogf)
++	    fprintf(mylogf, "(Unable to open search file \"%s\")\n", infnbuf);
+         return 0;
+     }
+     flushcomments(NULL, -1, -1);
+@@ -5517,7 +5517,7 @@
+ 	    else
+ 		printf("Reading import text for \"%s\"\n", mod->name);
+ 	if (verbose)
+-	    fprintf(logf, "%s, %d/%d: Reading import text for \"%s\"\n",
++	    fprintf(mylogf, "%s, %d/%d: Reading import text for \"%s\"\n",
+ 		    infname, inf_lnum, outf_lnum, mod->name);
+         pushctx(mod);
+         gettok();
+Description: Rename built-in function ‘logf’ declared as non-function
+Author: Ruben Molina <rmolina@udea.edu.co>
+--- p2c-1.21alpha2.orig/src/trans.h
++++ p2c-1.21alpha2/src/trans.h
+@@ -1773,7 +1773,7 @@
+ 
+ extern char *infname, *outfname, *codefname, *hdrfname;
+ extern char *requested_module;
+-extern FILE *inf, *outf, *codef, *hdrf, *logf;
++extern FILE *inf, *outf, *codef, *hdrf, *mylogf;
+ extern short setup_complete, found_module;
+ extern short regression, verbose, conserve_mem;
+ extern int inf_lnum, inf_ltotal;
+--- p2c-1.21alpha2.orig/src/trans.c
++++ p2c-1.21alpha2/src/trans.c
+@@ -588,17 +588,17 @@
+     if (!name)
+ 	name = format_s("%s.log", codefname);
+     saveoldfile(name);
+-    logf = fopen(name, "w");
+-    if (logf) {
+-	fprintf(logf, "\nTranslation of %s to %s by p2c %s\n",
++    mylogf = fopen(name, "w");
++    if (mylogf) {
++	fprintf(mylogf, "\nTranslation of %s to %s by p2c %s\n",
+ 		infname, codefname, P2C_VERSION);
+-	fprintf(logf, "Translated");
++	fprintf(mylogf, "Translated");
+ 	uname = getenv("USER");
+ 	if (uname)
+-	    fprintf(logf, " by %s", uname);
++	    fprintf(mylogf, " by %s", uname);
+ 	time(&starting_time);
+-	fprintf(logf, " on %s", ctime(&starting_time));
+-	fprintf(logf, "\n\n");
++	fprintf(mylogf, " on %s", ctime(&starting_time));
++	fprintf(mylogf, "\n\n");
+     } else {
+ 	perror(name);
+ 	verbose = 0;
+@@ -610,18 +610,18 @@
+ {
+     long ending_time;
+ 
+-    if (logf) {
+-	fprintf(logf, "\n\n");
++    if (mylogf) {
++	fprintf(mylogf, "\n\n");
+ #if defined(unix) || defined(__unix)
+-	fprintf(logf, "Total memory used: %ld bytes.\n", (long)sbrk(0));
++	fprintf(mylogf, "Total memory used: %ld bytes.\n", (long)sbrk(0));
+ #endif
+ 	time(&ending_time);
+-	fprintf(logf, "Processed %d source lines in %ld:%ld seconds.\n",
++	fprintf(mylogf, "Processed %d source lines in %ld:%ld seconds.\n",
+ 		inf_ltotal,
+ 		(ending_time - starting_time) / 60,
+ 		(ending_time - starting_time) % 60);
+-	fprintf(logf, "\n\nTranslation completed on %s", ctime(&ending_time));
+-	fclose(logf);
++	fprintf(mylogf, "\n\nTranslation completed on %s", ctime(&ending_time));
++	fclose(mylogf);
+     }
+ }
+ 
+@@ -949,7 +949,7 @@
+         setbuf(codef, NULL);      /* for debugging */
+     outf = codef;
+     outf_lnum = 1;
+-    logf = NULL;
++    mylogf = NULL;
+     if (verbose)
+ 	openlogfile();
+     setup_complete = 0;
+--- p2c-1.21alpha2.orig/src/out.c
++++ p2c-1.21alpha2/src/out.c
+@@ -1194,7 +1194,7 @@
+ 			    " seconds, %ld tries on line %d [251]", alts, outf_lnum);
+ 		    note(outbuf);
+ 		} else if (verbose) {
+-		    fprintf(logf, "%s, %d/%d: Line breaker spent %ld tries\n",
++		    fprintf(mylogf, "%s, %d/%d: Line breaker spent %ld tries\n",
+ 			    infname, inf_lnum, outf_lnum, alts);
+ 		}
+ 		if (testinglinebreaker)
+--- p2c-1.21alpha2.orig/src/comment.c
++++ p2c-1.21alpha2/src/comment.c
+@@ -299,7 +299,7 @@
+ 	    printf("\"%s\", line %d,%d: %s\n", infname, inf_lnum, outf_lnum, msg);
+     }
+     if (verbose)
+-	fprintf(logf, "%s:%d:%d: %s\n", infname, inf_lnum, outf_lnum, msg);
++	fprintf(mylogf, "%s:%d:%d: %s\n", infname, inf_lnum, outf_lnum, msg);
+     if (notephase == 2 || regression)
+ 	prefix = format_s("\004 p2c: %s:", infname);
+     else
+--- p2c-1.21alpha2.orig/src/lex.c
++++ p2c-1.21alpha2/src/lex.c
+@@ -520,7 +520,7 @@
+ 	    if (outf != stdout)
+ 		printf("Translation aborted: Too many errors.\n");
+ 	    if (verbose)
+-		fprintf(logf, "Translation aborted: Too many errors.\n");
++		fprintf(mylogf, "Translation aborted: Too many errors.\n");
+ 	    closelogfile();
+ 	    exit_failure();
+ 	}
+@@ -541,9 +541,9 @@
+         printf("Translation aborted.\n");
+     }
+     if (verbose) {
+-	fprintf(logf, "%s:%d:%d: %s\n",
++	fprintf(mylogf, "%s:%d:%d: %s\n",
+ 		infname, inf_lnum, outf_lnum, msg);
+-	fprintf(logf, "Translation aborted.\n");
++	fprintf(mylogf, "Translation aborted.\n");
+     }
+     closelogfile();
+     exit_failure();
+@@ -562,7 +562,7 @@
+ {
+     if (checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted warning: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted warning: %s\n",
+ 		    infname, inf_lnum, outf_lnum, msg);
+ 	return;
+     }
+@@ -577,7 +577,7 @@
+ {
+     if (checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted internal error in %s: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted internal error in %s: %s\n",
+ 		    infname, inf_lnum, outf_lnum, proc, msg);
+ 	return;
+     }
+@@ -596,7 +596,7 @@
+ {
+     if (blockkind == TOK_IMPORT || checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted note: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted note: %s\n",
+ 		    infname, inf_lnum, outf_lnum, msg);
+ 	return;
+     }
+@@ -612,12 +612,12 @@
+ {
+     if (blockkind == TOK_IMPORT || checkeatnote(msg)) {
+ 	if (verbose)
+-	    fprintf(logf, "%s:%d:%d: Omitted end-note: %s\n",
++	    fprintf(mylogf, "%s:%d:%d: Omitted end-note: %s\n",
+ 		    infname, inf_lnum, outf_lnum, msg);
+ 	return;
+     }
+     if (verbose)
+-	fprintf(logf, "%s:%d:%d: Recorded end-note: %s\n",
++	fprintf(mylogf, "%s:%d:%d: Recorded end-note: %s\n",
+ 		infname, inf_lnum, outf_lnum, msg);
+     (void) strlist_add(&endnotelist, msg);
+ }
+@@ -1327,7 +1327,7 @@
+ 	    else
+ 		printf("Reading include file \"%s\"\n", fn);
+ 	if (verbose)
+-	    fprintf(logf, "Reading include file \"%s\"\n", fn);
++	    fprintf(mylogf, "Reading include file \"%s\"\n", fn);
+         if (expandincludes == 0) {
+             push_input_file(fp, fn, 2);
+             curtok = TOK_INCLUDE;
+--- p2c-1.21alpha2.orig/src/parse.c
++++ p2c-1.21alpha2/src/parse.c
+@@ -4392,7 +4392,7 @@
+     long saveserial;
+ 
+     if (verbose)
+-	fprintf(logf, "%s, %d/%d: Translating %s (in %s)\n",
++	fprintf(mylogf, "%s, %d/%d: Translating %s (in %s)\n",
+ 		infname, inf_lnum, outf_lnum,
+ 		curctx->name, curctx->ctx->name);
+     notephase = 1;
+@@ -5479,8 +5479,8 @@
+     if (!fp) {
+         if (need)
+             perror(infnbuf);
+-	if (logf)
+-	    fprintf(logf, "(Unable to open search file \"%s\")\n", infnbuf);
++	if (mylogf)
++	    fprintf(mylogf, "(Unable to open search file \"%s\")\n", infnbuf);
+         return 0;
+     }
+     flushcomments(NULL, -1, -1);
+@@ -5517,7 +5517,7 @@
+ 	    else
+ 		printf("Reading import text for \"%s\"\n", mod->name);
+ 	if (verbose)
+-	    fprintf(logf, "%s, %d/%d: Reading import text for \"%s\"\n",
++	    fprintf(mylogf, "%s, %d/%d: Reading import text for \"%s\"\n",
+ 		    infname, inf_lnum, outf_lnum, mod->name);
+         pushctx(mod);
+         gettok();

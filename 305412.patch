@@ -1,0 +1,58 @@
+Description: Fix two memory management errors
+Bug-Debian: http://bugs.debian.org/305412
+Author: Peter De Wachter <pdewacht@caladan.rave.org>
+--- p2c-1.21alpha2.orig/src/decl.c
++++ p2c-1.21alpha2/src/decl.c
+@@ -789,8 +789,10 @@
+ 		mpp2 = &mp2->snext;
+ 	    if (mp2)
+ 		*mpp2 = mp2->snext;
++#if 0
+ 	    if (mp->kind == MK_CONST)
+ 		free_value(&mp->val);
++#endif
+ 	    freeexpr(mp->constdefn);
+ 	    if (mp->cbase)
+ 		forget_ctx(mp, 1);
+--- p2c-1.21alpha2.orig/src/parse.c
++++ p2c-1.21alpha2/src/parse.c
+@@ -4642,8 +4642,10 @@
+ 	}
+     }
+     if (conserve_mem) {
++#if 0
+ 	free_stmt((Stmt *)func->val.i);   /* is this safe? */
+ 	func->val.i = 0;
++#endif
+ 	forget_ctx(func, 0);
+     }
+     outsection(spacing);
+Description: Fix two memory management errors
+Bug-Debian: http://bugs.debian.org/305412
+Author: Peter De Wachter <pdewacht@caladan.rave.org>
+--- p2c-1.21alpha2.orig/src/decl.c
++++ p2c-1.21alpha2/src/decl.c
+@@ -789,8 +789,10 @@
+ 		mpp2 = &mp2->snext;
+ 	    if (mp2)
+ 		*mpp2 = mp2->snext;
++#if 0
+ 	    if (mp->kind == MK_CONST)
+ 		free_value(&mp->val);
++#endif
+ 	    freeexpr(mp->constdefn);
+ 	    if (mp->cbase)
+ 		forget_ctx(mp, 1);
+--- p2c-1.21alpha2.orig/src/parse.c
++++ p2c-1.21alpha2/src/parse.c
+@@ -4642,8 +4642,10 @@
+ 	}
+     }
+     if (conserve_mem) {
++#if 0
+ 	free_stmt((Stmt *)func->val.i);   /* is this safe? */
+ 	func->val.i = 0;
++#endif
+ 	forget_ctx(func, 0);
+     }
+     outsection(spacing);

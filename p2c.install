@@ -1,0 +1,10 @@
+home/libp2c.a	usr/lib/
+home/loc.p2crc	usr/lib/p2c/
+home/p2crc	usr/lib/p2c/
+home/string.pas	usr/lib/p2c/
+home/system.imp	usr/lib/p2c/
+home/system.m2	usr/lib/p2c/
+home/turbo.imp	usr/lib/p2c/
+home/p2c/p2c.h	usr/include/p2c/
+p2cc		usr/bin/
+p2c		usr/bin/

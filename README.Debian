@@ -1,0 +1,108 @@
+p2c for Debian
+--------------
+
+You should be aware that p2c is not perfect in converting Pascal sources
+to C, and it won't make the best C code.
+
+Also if you notice that your translated C program won't compile because
+of an undefined reference to PASCAL_MAIN function, just comment that line
+from the C file and it should work.
+
+Here are some words from src/INSTALL file that could be of some use:
+
++++
+
+  Incomplete interface texts for standard Turbo units are included in
+  turbo.imp.  Turbo users will have to flesh these out and write emulations
+  for whatever parts of the Turbo runtime library they need.
+
+  If you wish to edit various system-wide configuration parameters, it is
+  better to put them in loc.p2crc than in sys.p2crc.  As an example, on a
+  Turbo-oriented environment you may wish to add
+
+      Language Turbo
+
+  to the loc.p2crc file to replace the normal default (HP Pascal).
+
+  PORTABILITY
+
+  P2c was originally developed on a homebrew C compiler on the HP Pascal
+  Workstation operating system.  Current development takes place on HP-UX,
+  which is System V based.  The translator has also been compiled and used
+  on Sun-3's, so presumably it is fairly portable among 32-bit Unix machines.
+
+  Many parts of the code will have to be adjusted in order for p2c to work
+  on a machine with 16-bit ints.  I have never had reason or opportunity to
+  track these down since I don't have access to such a machine.  Please note
+  that code _generated_ by p2c works with either size of int even though p2c
+  itself does not.
+
+  If your compiler supports ANSI prototypes, most of the 16-bit portability
+  problems will go away except for possible %d/%ld sloppiness in sprintf control
+  strings.  There may be places where p2c tries to cast a pointer into an
+  int, but I believe all such cases use longs consistently.  You will have
+  a problem if your long type is not large enough to store a pointer.
+
+  Because p2c was developed to run under Unix, it is sloppy about memory
+  allocation.  Some data structures are allocated but never freed.  Profiles
+  show that the waste is not too great in most cases, but if it is a problem
+  you may have to write a garbage collector (this shouldn't be too hard if you
+  only run the collector after translating each procedure).
+
++++
+
+ -- Josip Rodin <joy-packages@debian.org>, Mon, 28 Dec 1998 18:14:23 +0100
+p2c for Debian
+--------------
+
+You should be aware that p2c is not perfect in converting Pascal sources
+to C, and it won't make the best C code.
+
+Also if you notice that your translated C program won't compile because
+of an undefined reference to PASCAL_MAIN function, just comment that line
+from the C file and it should work.
+
+Here are some words from src/INSTALL file that could be of some use:
+
++++
+
+  Incomplete interface texts for standard Turbo units are included in
+  turbo.imp.  Turbo users will have to flesh these out and write emulations
+  for whatever parts of the Turbo runtime library they need.
+
+  If you wish to edit various system-wide configuration parameters, it is
+  better to put them in loc.p2crc than in sys.p2crc.  As an example, on a
+  Turbo-oriented environment you may wish to add
+
+      Language Turbo
+
+  to the loc.p2crc file to replace the normal default (HP Pascal).
+
+  PORTABILITY
+
+  P2c was originally developed on a homebrew C compiler on the HP Pascal
+  Workstation operating system.  Current development takes place on HP-UX,
+  which is System V based.  The translator has also been compiled and used
+  on Sun-3's, so presumably it is fairly portable among 32-bit Unix machines.
+
+  Many parts of the code will have to be adjusted in order for p2c to work
+  on a machine with 16-bit ints.  I have never had reason or opportunity to
+  track these down since I don't have access to such a machine.  Please note
+  that code _generated_ by p2c works with either size of int even though p2c
+  itself does not.
+
+  If your compiler supports ANSI prototypes, most of the 16-bit portability
+  problems will go away except for possible %d/%ld sloppiness in sprintf control
+  strings.  There may be places where p2c tries to cast a pointer into an
+  int, but I believe all such cases use longs consistently.  You will have
+  a problem if your long type is not large enough to store a pointer.
+
+  Because p2c was developed to run under Unix, it is sloppy about memory
+  allocation.  Some data structures are allocated but never freed.  Profiles
+  show that the waste is not too great in most cases, but if it is a problem
+  you may have to write a garbage collector (this shouldn't be too hard if you
+  only run the collector after translating each procedure).
+
++++
+
+ -- Josip Rodin <joy-packages@debian.org>, Mon, 28 Dec 1998 18:14:23 +0100

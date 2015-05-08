@@ -1,0 +1,32 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh --with quilt  $@
+
+clean:
+	dh clean --with quilt --before dh_auto_clean
+	$(MAKE) -C src clean
+	# binary file contents changed
+	rm -f p2c home/libp2c.a examples/fact examples/basic examples/self examples/e examples/cref src/makeproto
+	# patch-system-but-direct-changes-in-diff
+	rm -rf home/ 
+	rm -f examples/*.c examples/*.out p2cc src/p2cc src/p2c.man.inst src/p2c.cat
+	dh clean --with quilt --after dh_auto_clean
+
+binary:
+	dh binary --with quilt --until dh_prep
+	dh_installchangelogs src/HISTORY
+	dh_installman src/p2c.man
+	dh_installman src/p2cc.man
+	dh_installexamples examples/*.p
+	dh_installexamples examples/README
+	dh binary --with quilt --remaining
