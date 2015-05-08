@@ -4642,8 +4642,10 @@ Meaning *func;
 	}
     }
     if (conserve_mem) {
+#if 0
 	free_stmt((Stmt *)func->val.i);   /* is this safe? */
 	func->val.i = 0;
+#endif
 	forget_ctx(func, 0);
     }
     outsection(spacing);
