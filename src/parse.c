@@ -5073,7 +5073,7 @@ Token blkind;
 	out_include(fname, 1);
     outsection(majorspace);
     pop_input();
-    getline();
+    mygetline();
     gettok();
 }
 
