@@ -1773,7 +1773,7 @@ extern int final_parens, final_ptrdescs, final_misc;
 
 extern char *infname, *outfname, *codefname, *hdrfname;
 extern char *requested_module;
-extern FILE *inf, *outf, *codef, *hdrf, *logf;
+extern FILE *inf, *outf, *codef, *hdrf, *mylogf;
 extern short setup_complete, found_module;
 extern short regression, verbose, conserve_mem;
 extern int inf_lnum, inf_ltotal;

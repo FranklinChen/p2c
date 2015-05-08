@@ -588,17 +588,17 @@ Static void openlogfile()
     if (!name)
 	name = format_s("%s.log", codefname);
     saveoldfile(name);
-    logf = fopen(name, "w");
-    if (logf) {
-	fprintf(logf, "\nTranslation of %s to %s by p2c %s\n",
+    mylogf = fopen(name, "w");
+    if (mylogf) {
+	fprintf(mylogf, "\nTranslation of %s to %s by p2c %s\n",
 		infname, codefname, P2C_VERSION);
-	fprintf(logf, "Translated");
+	fprintf(mylogf, "Translated");
 	uname = getenv("USER");
 	if (uname)
-	    fprintf(logf, " by %s", uname);
+	    fprintf(mylogf, " by %s", uname);
 	time(&starting_time);
-	fprintf(logf, " on %s", ctime(&starting_time));
-	fprintf(logf, "\n\n");
+	fprintf(mylogf, " on %s", ctime(&starting_time));
+	fprintf(mylogf, "\n\n");
     } else {
 	perror(name);
 	verbose = 0;
@@ -610,18 +610,18 @@ void closelogfile()
 {
     long ending_time;
 
-    if (logf) {
-	fprintf(logf, "\n\n");
+    if (mylogf) {
+	fprintf(mylogf, "\n\n");
 #if defined(unix) || defined(__unix)
-	fprintf(logf, "Total memory used: %ld bytes.\n", (long)sbrk(0));
+	fprintf(mylogf, "Total memory used: %ld bytes.\n", (long)sbrk(0));
 #endif
 	time(&ending_time);
-	fprintf(logf, "Processed %d source lines in %ld:%ld seconds.\n",
+	fprintf(mylogf, "Processed %d source lines in %ld:%ld seconds.\n",
 		inf_ltotal,
 		(ending_time - starting_time) / 60,
 		(ending_time - starting_time) % 60);
-	fprintf(logf, "\n\nTranslation completed on %s", ctime(&ending_time));
-	fclose(logf);
+	fprintf(mylogf, "\n\nTranslation completed on %s", ctime(&ending_time));
+	fclose(mylogf);
     }
 }
 
@@ -949,7 +949,7 @@ char **argv;
         setbuf(codef, NULL);      /* for debugging */
     outf = codef;
     outf_lnum = 1;
-    logf = NULL;
+    mylogf = NULL;
     if (verbose)
 	openlogfile();
     setup_complete = 0;
