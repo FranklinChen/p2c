@@ -176,7 +176,7 @@ void get_C_string(2554,61800
 char getchartok(2466,60243
 Static int getflag(2451,60064
 char *getinlinepart(2414,59241
-void getline(1047,22000
+void getaline(1047,22000
 char *getparenstr(2481,60499
 void gettok(2728,65611
 void gettok(2752,66193

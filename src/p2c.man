@@ -466,7 +466,7 @@ and
 .IR foo.c ;
 the latter will usually be empty.  The command
 .IP
-\ \ \ \ \ p2c \-s foo.def foo.mod
+\ \ \ \ \ p2c -s foo.def foo.mod
 .IP
 will translate the implementation part into file
 .I foo.c.
@@ -1264,7 +1264,7 @@ and
 .I %s.text
 in the current directory, then for
 .I --HOMEDIR--/%s.imp.
-(where \--HOMEDIR-- is the
+(where --HOMEDIR-- is the
 .I p2c
 home directory.)
 .TP
@@ -1691,17 +1691,17 @@ p2crc	local configuration file
 .br
 \&.p2crc	alternate local configuration file
 .br
-\--HOMEDIR--/p2crc	system-wide configuration file
+--HOMEDIR--/p2crc	system-wide configuration file
 .br
-\--HOMEDIR--/system.imp	declarations for predefined functions
+--HOMEDIR--/system.imp	declarations for predefined functions
 .br
-\--HOMEDIR--/system.m2	analogous declarations for Modula-2
+--HOMEDIR--/system.m2	analogous declarations for Modula-2
 .br
-\--HOMEDIR--/*.imp	interface text for standard modules
+--HOMEDIR--/*.imp	interface text for standard modules
 .br
-\--INCDIR--/p2c.h	header file for translated programs
+--INCDIR--/p2c.h	header file for translated programs
 .br
-\--LIBDIR--/libp2c.a	run-time library
+--LIBDIR--/libp2c.a	run-time library
 .SH AUTHOR
 Dave Gillespie, daveg@synaptics.com.
 .PP

@@ -789,10 +789,8 @@ int all;
 		mpp2 = &mp2->snext;
 	    if (mp2)
 		*mpp2 = mp2->snext;
-#if 0
 	    if (mp->kind == MK_CONST)
 		free_value(&mp->val);
-#endif
 	    freeexpr(mp->constdefn);
 	    if (mp->cbase)
 		forget_ctx(mp, 1);
