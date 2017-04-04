@@ -139,7 +139,7 @@ char *p2c_home = P2C_HOME;
 extern char *p2c_home;
 #endif
 
-#define P2C_VERSION  "1.21alpha-07.Dec.93"
+#define P2C_VERSION  "2.00.Oct.15"
 
 
 
@@ -1773,7 +1773,9 @@ extern int final_parens, final_ptrdescs, final_misc;
 
 extern char *infname, *outfname, *codefname, *hdrfname;
 extern char *requested_module;
-extern FILE *inf, *outf, *codef, *hdrf, *mylogf;
+/* 2015 Oct 02: logf renamed to be logfile to avoid conflicting
+with the floating log function */
+extern FILE *inf, *outf, *codef, *hdrf, *logfile;
 extern short setup_complete, found_module;
 extern short regression, verbose, conserve_mem;
 extern int inf_lnum, inf_ltotal;

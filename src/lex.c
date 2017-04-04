@@ -520,7 +520,7 @@ void counterror()
 	    if (outf != stdout)
 		printf("Translation aborted: Too many errors.\n");
 	    if (verbose)
-		fprintf(mylogf, "Translation aborted: Too many errors.\n");
+		fprintf(logfile, "Translation aborted: Too many errors.\n");
 	    closelogfile();
 	    exit_failure();
 	}
@@ -541,9 +541,9 @@ char *msg;
         printf("Translation aborted.\n");
     }
     if (verbose) {
-	fprintf(mylogf, "%s:%d:%d: %s\n",
+	fprintf(logfile, "%s:%d:%d: %s\n",
 		infname, inf_lnum, outf_lnum, msg);
-	fprintf(mylogf, "Translation aborted.\n");
+	fprintf(logfile, "Translation aborted.\n");
     }
     closelogfile();
     exit_failure();
@@ -562,7 +562,7 @@ char *msg;
 {
     if (checkeatnote(msg)) {
 	if (verbose)
-	    fprintf(mylogf, "%s:%d:%d: Omitted warning: %s\n",
+	    fprintf(logfile, "%s:%d:%d: Omitted warning: %s\n",
 		    infname, inf_lnum, outf_lnum, msg);
 	return;
     }
@@ -577,7 +577,7 @@ char *proc, *msg;
 {
     if (checkeatnote(msg)) {
 	if (verbose)
-	    fprintf(mylogf, "%s:%d:%d: Omitted internal error in %s: %s\n",
+	    fprintf(logfile, "%s:%d:%d: Omitted internal error in %s: %s\n",
 		    infname, inf_lnum, outf_lnum, proc, msg);
 	return;
     }
@@ -596,7 +596,7 @@ char *msg;
 {
     if (blockkind == TOK_IMPORT || checkeatnote(msg)) {
 	if (verbose)
-	    fprintf(mylogf, "%s:%d:%d: Omitted note: %s\n",
+	    fprintf(logfile, "%s:%d:%d: Omitted note: %s\n",
 		    infname, inf_lnum, outf_lnum, msg);
 	return;
     }
@@ -612,12 +612,12 @@ char *msg;
 {
     if (blockkind == TOK_IMPORT || checkeatnote(msg)) {
 	if (verbose)
-	    fprintf(mylogf, "%s:%d:%d: Omitted end-note: %s\n",
+	    fprintf(logfile, "%s:%d:%d: Omitted end-note: %s\n",
 		    infname, inf_lnum, outf_lnum, msg);
 	return;
     }
     if (verbose)
-	fprintf(mylogf, "%s:%d:%d: Recorded end-note: %s\n",
+	fprintf(logfile, "%s:%d:%d: Recorded end-note: %s\n",
 		infname, inf_lnum, outf_lnum, msg);
     (void) strlist_add(&endnotelist, msg);
 }
@@ -1044,7 +1044,7 @@ Strlist *sl;
 
 
 
-void mygetline()
+void getaline()
 {
     char *cp, *cp2;
 
@@ -1071,7 +1071,7 @@ void mygetline()
 			infname = stralloc(cp);
 			infname[cp2 - cp] = 0;
 		    }
-		    mygetline();
+		    getaline();
 		    return;
 		}
 		if (copysource && *inbuf) {
@@ -1088,7 +1088,7 @@ void mygetline()
                     fprintf(stderr, "\n");
                 if (inputkind == INP_INCFILE) {
                     pop_input();
-                    mygetline();
+                    getaline();
                 } else
                     strcpy(inbuf, "\001");
             }
@@ -1179,7 +1179,7 @@ char *fname;
         infname = fname;
         inf_lnum = 0;
     } else
-        inf_lnum--;     /* adjust for extra mygetline() */
+        inf_lnum--;     /* adjust for extra getaline() */
     *inbuf = 0;
     inbufptr = inbuf;
     gettok();
@@ -1327,7 +1327,7 @@ char *fn;
 	    else
 		printf("Reading include file \"%s\"\n", fn);
 	if (verbose)
-	    fprintf(mylogf, "Reading include file \"%s\"\n", fn);
+	    fprintf(logfile, "Reading include file \"%s\"\n", fn);
         if (expandincludes == 0) {
             push_input_file(fp, fn, 2);
             curtok = TOK_INCLUDE;
@@ -2367,7 +2367,7 @@ int starparen;    /* 0={ }, 1=(* *), 2=C comments, 3=" " */
 		else
 		    commentline(CMT_POST);
 		trailing = 0;
-                mygetline();
+                getaline();
 		i = 0;
 		for (;;) {
 		    if (*inbufptr == ' ') {
@@ -2419,7 +2419,7 @@ char *getinlinepart()
         if (isspace(*inbufptr)) {
             inbufptr++;
         } else if (!*inbufptr) {
-            mygetline();
+            getaline();
         } else if (*inbufptr == '{') {
             inbufptr++;
             comment(0);
@@ -2513,7 +2513,7 @@ void leadingcomments()
         switch (*inbufptr++) {
 
             case 0:
-                mygetline();
+                getaline();
                 break;
 
             case ' ':
@@ -2765,7 +2765,7 @@ void gettok()
             case 0:
 	        if (commenting_flag)
 		    saveinputcomment(inbufptr-1);
-                mygetline();
+                getaline();
 		cp = curtokbuf;
 		for (;;) {
 		    inbufindent = 0;
@@ -2782,7 +2782,7 @@ void gettok()
 		    }
 		    if (!*inbufptr && !commenting_flag) {   /* blank line */
 			*cp++ = '\001';
-			mygetline();
+			getaline();
 		    } else
 			break;
 		}
@@ -2797,10 +2797,10 @@ void gettok()
 		*cp++ = '\001';
 		*cp++ = '\014';
 		if (!*inbufptr && !commenting_flag) {
-		    mygetline();
+		    getaline();
 		    while (!*inbufptr) {
 			*cp++ = '\001';
-			mygetline();
+			getaline();
 		    }
 		}
 		*cp = 0;
