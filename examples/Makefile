@@ -7,6 +7,7 @@
 P2C = ../p2c
 INC = ../home
 LIB = ../home/libp2c.a
+CFLAGS = -Wno-implicit-function-declaration -Wno-implicit-int
 
 
 default: comp
@@ -38,19 +39,19 @@ basic.c: basic.p
 comp:  fact  e  self  cref  basic
 
 fact: fact.c
-	$(CC) -I$(INC) fact.c $(LIB) -o fact
+	$(CC) $(CFLAGS) -I$(INC) fact.c $(LIB) -o fact
 
 e: e.c
-	$(CC) -I$(INC) e.c $(LIB) -o e
+	$(CC) $(CFLAGS) -I$(INC) e.c $(LIB) -o e
 
 self: self.c
-	$(CC) -I$(INC) self.c $(LIB) -o self
+	$(CC) $(CFLAGS) -I$(INC) self.c $(LIB) -o self
 
 cref: cref.c
-	$(CC) -I$(INC) cref.c $(LIB) -o cref
+	$(CC) $(CFLAGS) -I$(INC) cref.c $(LIB) -o cref
 
 basic: basic.c
-	$(CC) -I$(INC) basic.c $(LIB) -lm -o basic
+	$(CC) $(CFLAGS) -I$(INC) basic.c $(LIB) -lm -o basic
 
 
 

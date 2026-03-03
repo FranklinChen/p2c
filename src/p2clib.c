@@ -56,6 +56,11 @@ char **argv;
 
 /* In case your system lacks these... */
 
+/* Forward declaration needed because my_memmove calls my_memcpy */
+#ifdef __STDC__
+Anyptr my_memcpy(Anyptr d, Const Anyptr s, size_t n);
+#endif
+
 long my_labs(x)
 long x;
 {
