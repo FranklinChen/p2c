@@ -1,5 +1,5 @@
 
-/* Declarations created by "makeproto" on Tue Dec  7 20:57:13 1993 */
+/* Declarations created by "makeproto" on Fri Oct  2 13:56:03 2015 */
 
 
 
@@ -169,7 +169,7 @@ extern Symbol  *findsymbol         PP( (char *name) );
 extern void     clearprogress      PV();
 extern void     progress           PV();
 extern void     replacestrings     PP( (char *buf, Strlist *sl) );
-extern void     getline            PV();
+extern void     getaline           PV();
 extern void     push_input_file    PP( (FILE *fp, char *fname, int isinclude) );
 extern void     include_as_import  PV();
 extern void     push_input_strlist PP( (Strlist *sp, char *fname) );
