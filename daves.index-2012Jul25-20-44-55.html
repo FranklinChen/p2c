@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+   <TITLE>Dave Gillespie Home Page</TITLE>
+   <META NAME="Author" CONTENT="Dave Gillespie">
+   <META NAME="GENERATOR" CONTENT="Mozilla/3.0Gold (Win95; I) [Netscape]">
+   <META NAME="KeyWords" CONTENT="p2c">
+</HEAD>
+<BODY>
+
+<H1>Dave Gillespie</H1>
+
+<P>Welcome to my Home Page!</P>
+
+<P>Who am I? I'm a programmer, and I have put this page together as a way
+to distribute some of the programs I've written over the years. Sorry,
+no baby pictures or links to my favorite soap stars just yet...</P>
+
+<P>These programs are distributed in source-code form covered by the GNU&nbsp;General
+Public License. The GPL&nbsp;basically says you are allowed to use and
+distribute the program freely, but <I>only</I> freely---for example, you
+aren't allowed to incorporate the program in your own proprietary product.
+<A HREF="http://www.gnu.ai.mit.edu/copyleft/copyleft.html">Click here</A>
+to learn more about the GPL.</P>
+
+<P>These programs are encoded with <B>tar</B> and <B>gzip</B>. Utilities
+to unpack these files are available from the <A HREF="http://www.gnu.ai.mit.edu">GNU&nbsp;project</A>,
+or from the GNU&nbsp;FTP&nbsp;server, <A HREF="ftp://prep.ai.mit.edu/pub/gnu">prep.ai.mit.edu</A>.</P>
+
+<P>Feel free to contact me at <A HREF="mailto:daveg@synaptics.com">daveg@synaptics.com</A>.</P>
+
+<P>
+<HR WIDTH="100%"></P>
+
+<H2>p2c -- a Pascal to C&nbsp;translator</H2>
+
+<P>P2c started out as a tool to help us translate the Chipmunk Tools, a
+set of CAD&nbsp;tools developed at Caltech. These tools were written in
+HP&nbsp;Pascal, a powerful dialect of the Pascal programming language which
+unfortunately only works on HP&nbsp;computers. When it came time for the
+tools to outgrow their original HP&nbsp;&quot;Chipmunk&quot; workstations,
+they had to be translated to a more portable language like C. I was able
+to save several months of dull grunt work by writing an automatic translator
+to do the job. True, it did take a year and a half to write the translator,
+but the grunt work was almost entirely eliminated.</P>
+
+<P>P2c is written in C. It was designed for Unix, but it compiles pretty
+easily on any system with a 32-bit C compiler. P2c is distributed as source
+code only---you will have to compile it yourself. P2c itself is covered
+by the GNU&nbsp;General Public License, but programs <I>translated by</I>
+p2c, and the runtime code supplied with p2c, are explicitly <I>not</I>
+covered by the GPL. You can do whatever you want with those.</P>
+
+<P>P2c understands all of ISO&nbsp;Standard Pascal, and most of the extensions
+of HP&nbsp;Pascal, Turbo Pascal, VAX Pascal, and a variety of other dialects.
+P2c can be targeted to generate ANSI&nbsp;C, older-style C, or C++. However,
+p2c does not know how to target to specific computers or operating systems,
+so if your program uses built-in Pascal functions for graphics, device-level
+I/O, and so on, then you will have to supply your own C&nbsp;functions
+to do those jobs.</P>
+
+<P>P2c's main goals are readability and correctness of the output code.
+Translators usually fall in one of two categories: Either they work on
+the text of the program directly without really &quot;understanding&quot;
+the program, or they are really more like a Pascal compiler that outputs
+C&nbsp;instead of machine language. The first kind of translators can preserve
+most of the formatting of the original program, producing translations
+that are easy to read and to maintain, but that usually require a lot of
+manual touch-up work before they are correct and ready to compile. The
+other kind of translators can guarantee the correctness of the translation,
+but often the output is barely readable by humans. P2c tries for a middle
+ground, using compiler-like techniques to get a high-quality translation,
+but also paying close attention to issues like comments, naming, and formatting
+that true compilers generally ignore.</P>
+
+<P>For example, the names <TT>Foo</TT> and <TT>FOO</TT>&nbsp;are equivalent
+in Pascal but distinct in C. If your program declares a variable as <TT>Foo</TT>
+but later refers to it as <TT>foo</TT> or <TT>FOO</TT>, p2c will change
+all the references to read &quot;<TT>Foo</TT>&quot; in order to match C's
+rules. A purely text-style translator might leave the names alone, requiring
+you to fix them up by hand afterward. A compiler-style translator might
+convert all names to upper-case to save itself the trouble, producing a
+translation that was perfectly correct but not very pleasing to the human
+eye.</P>
+
+<P>P2c is designed to translate large, complex programs. A&nbsp;number
+of people have used p2c to translate 100K- to million-line Pascal programs
+into C.</P>
+
+<P>The most recent official release of p2c was version 1.20, released in
+1991. You can still FTP it from <A HREF="ftp://cs.caltech.edu/pub">cs.caltech.edu</A>,.
+You can also download 1.20.1, with one minor bug fix in the <TT>realint</TT>
+function, from this Web page:</P>
+
+<P><A HREF="http://www.synaptics.com/people/daveg/p2c-1.20.1.tar.gz">Click
+here to download p2c 1.20.1 (.tar.gz, 390K)</A></P>
+
+<P>In late 1993 I made available some early &quot;alpha test&quot; copies
+of p2c 1.21, but I never had time to formally release it. However, the
+alpha release has proven pretty solid over time. It includes a variety
+of bug fixes, plus support for translating object-oriented Pascal (Mac
+Object Pascal or Turbo Pascal 6.0) into C++.</P>
+
+<P><A HREF="http://www.synaptics.com/people/daveg/p2c-1.21alpha2.tar.gz">Click
+here to download p2c 1.21 &quot;alpha 2&quot; (.tar.gz, 422K)</A></P>
+
+<P>
+<HR WIDTH="100%"></P>
+
+<H2>Calc -- the GNU&nbsp;Emacs calculator</H2>
+
+<P>GNU&nbsp;Emacs is an extensible text editor widely used in the Unix
+community. Just how extensible? To find out, I set out to write a full-featured
+calculator extension in the Emacs Lisp extension language. Before I knew
+it, I had a powerful interactive package for numerical and symbolic math.
+Emacs Calc can do arbitrary precision arithmetic, operations on matrices,
+complex numbers, calendar dates and various other types, plus symbolic
+algebra and calculus, graphics, and lots more. Calc also comes with an
+extensive manual which you can print or read on-line. (The <A HREF="http://www.gnu.ai.mit.edu">GNU&nbsp;project</A>
+sells a bound copy of the Calc manual as well.)</P>
+
+<P>You can get&nbsp;Emacs Calc, and GNU&nbsp;Emacs itself, from the GNU&nbsp;project
+FTP&nbsp;server <A HREF="ftp://prep.ai.mit.edu/pub/gnu">prep.ai.mit.edu</A>.
+You can also download Calc from this Web page:</P>
+
+<P><A HREF="http://www.synaptics.com/people/daveg/calc-2.02f.tar.gz">Click
+here to download Calc 2.02f (.tar.gz, 837K, 15 Dec 96)</A></P>
+
+<P>Previous versions of Calc:</P>
+
+<P><A HREF="http://www.synaptics.com/people/daveg/calc-2.02e.tar.gz">Click
+here to download Calc 2.02e (.tar.gz, 824K, 22 Sep 96)</A></P>
+
+<P>
+<HR WIDTH="100%"></P>
+
+<H2>Chipmunk Tools</H2>
+
+<P>The Chipmunk CAD&nbsp;Tools were developed at Caltech in the 1980's
+for use in professor <A HREF="http://www.cns.caltech.edu/Faculty/Mead.html">Carver
+Mead</A>'s research lab. My own contributions include <I>LOG</I>, an interactive
+digital logic simulator which was later expanded to an analog simulator
+by <A HREF="http://http.cs.berkeley.edu/~lazzaro/">John Lazzaro</A>, and
+<I>View</I>, a tool for graphing and manipulating data. The Chipmunk tools
+have been ported to a variety of platforms, and are available as free software.</P>
+
+<P><A HREF="http://www.pcmp.caltech.edu:80/chipmunk">Click here</A> to
+go to the Chipmunk Tools home page.</P>
+
+</BODY>
+<!-- Footer BEGIN -->
+<br>
+<a href = "http://www.cancer.gov/"><img border=0
+src = "images/www.cancer.gov-footer-icon.gif"
+&nbsp;&nbsp;
+<a href = "http://www.nih.gov/"><img border=0
+src = "images/www.nih.gov-footer-icon.gif"
+&nbsp;&nbsp;
+<a href = "http://www.dhhs.gov/"><img border=0
+src = "images/www.dhhs.gov-footer-icon.gif"
+alt = "Health and Human Services"></a>
+&nbsp;&nbsp;
+<a href = "http://www.usa.gov/"><img border=0
+src = "images/www.usa.gov-footer-icon.gif"
+alt = "USA Gov - Official Web Portal"></a>
+&nbsp;&nbsp;
+<a href =
+"http://ccr.ncifcrf.gov/about/Viewers.aspx"
+>Viewing Files</a>
+&nbsp;&nbsp;
+<a href =
+"http://ccr.ncifcrf.gov/about/Accessibility.aspx"
+>Accessibility</a>
+<!-- Footer END -->
+</HTML>
