@@ -13,8 +13,6 @@
 
 #include <stdio.h>
 
-Void VAXdate(s)
-Void VAXtime(s)
 
 
 /* If the following heuristic fails, compile -DBSD=0 for non-BSD systems,

@@ -40,7 +40,7 @@ MANFILE = p2c.cat          # human-readable manual (for cat.1)
 CC = cc                    # you may wish to use gcc here instead
 OPT = # -O		   # uncomment this for optimization
 DEB = # -g		   # uncomment this for debugging
-DEFS =			   # place other -D types of things here
+DEFS =	-DTEST_MALLOC      # place other -D types of things here # TDS 2015nov18
 CFLAGS = $(OPT) $(DEB) $(DEFS)
 LFLAGS =
 

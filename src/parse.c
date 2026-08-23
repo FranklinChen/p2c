@@ -4392,7 +4392,7 @@ Static Stmt *p_body()
     long saveserial;
 
     if (verbose)
-	fprintf(logf, "%s, %d/%d: Translating %s (in %s)\n",
+	fprintf(logfile, "%s, %d/%d: Translating %s (in %s)\n",
 		infname, inf_lnum, outf_lnum,
 		curctx->name, curctx->ctx->name);
     notephase = 1;
@@ -5477,8 +5477,8 @@ int need;
     if (!fp) {
         if (need)
             perror(infnbuf);
-	if (logf)
-	    fprintf(logf, "(Unable to open search file \"%s\")\n", infnbuf);
+	if (logfile)
+	    fprintf(logfile, "(Unable to open search file \"%s\")\n", infnbuf);
         return 0;
     }
     flushcomments(NULL, -1, -1);
@@ -5515,7 +5515,7 @@ int need;
 	    else
 		printf("Reading import text for \"%s\"\n", mod->name);
 	if (verbose)
-	    fprintf(logf, "%s, %d/%d: Reading import text for \"%s\"\n",
+	    fprintf(logfile, "%s, %d/%d: Reading import text for \"%s\"\n",
 		    infname, inf_lnum, outf_lnum, mod->name);
         pushctx(mod);
         gettok();
