@@ -7,6 +7,10 @@
  * by the licence agreement accompanying p2c itself.
  */
 
+/* Modifications by Tom Schneider
+2022 oct 08 I commented out my_memcpy to avoid C99
+"previous implicit declaration" error.
+*/
 
 
 #include "p2c.h"
@@ -74,6 +78,12 @@ register int n;
     register char *dd = (char *)d, *ss = (char *)s;
     if (dd < ss || dd - ss >= n) {
 #if defined(bcopy) && defined(memcpy)
+/*
+2022 oct 08 my_memcpy had this C99 error:
+p2clib.c:77:9: note: previous implicit declaration is here
+ 58         my_memcpy(dd, ss, n);
+SO REMOVE IT
+2022 Oct 13 HOLD REMOVE */
         my_memcpy(dd, ss, n);
 #else
 	memcpy(dd, ss, n);
@@ -88,6 +98,8 @@ register int n;
 }
 
 
+/* 2022 oct 08 avoid C99 implicit declaration problem,
+2022 Oct 13 I added definitions to p2c.h */
 #ifdef __STDC__
 Anyptr my_memcpy(Anyptr d, Const Anyptr s, size_t n)
 #else
@@ -102,6 +114,7 @@ register int n;
     return d;
 }
 
+/* 2022 Oct 13 here's where mecpy is used */
 #ifdef __STDC__
 int my_memcmp(Const Anyptr s1, Const Anyptr s2, size_t n)
 #else

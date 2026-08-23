@@ -13,14 +13,55 @@
 
 #include <stdio.h>
 
+/* 2022 Oct 05 tds fix  PART 1
+This is a code fix by Thomas D. Schneider (tds).
+---
+To avoid these errors that now occur in macOS:
+timep2c.c:168:3: error: implicit declaration of function 'VAXdate' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+  VAXdate(adate);
+  ^
+timep2c.c:169:3: error: implicit declaration of function 'VAXtime' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+  VAXtime(atime);
+_
+google:
+Implicit declaration of function is invalid in C99
+_
+https://stackoverflow.com/questions/15850042/xcode-warning-implicit-declaration-of-function-is-invalid-in-c99
+_
+===
+The function has to be declared before it's getting called. This could be done in various ways:
+_
+    Write down the prototype in a header
+    Use this if the function shall be callable from several source files. Just write your prototype
+    int Fibonacci(int number);
+    down in a .h file (e.g. myfunctions.h) and then #include "myfunctions.h" in the C code.
+_
+    Move the function before it's getting called the first time
+    This means, write down the function
+    int Fibonacci(int number){..}
+    before your main() function
+_
+    Explicitly declare the function before it's getting called the first time
+    This is the combination of the above flavors: type the prototype of the function in the C file before your main() function
+===
+_
+In p2clib.c is this kind of code:
+===
 Void VAXdate(s)
-Void VAXtime(s)
+char *s;
+===
+So we add the following to this p2c.h to make the compile work:
+*/
+void VAXdate(char *s);
+void VAXtime(char *s);
+
+
 
 
 /* If the following heuristic fails, compile -DBSD=0 for non-BSD systems,
    or -DBSD=1 for BSD systems. */
 
-#ifdef M_XENIX
+# ifdef M_XENIX
 # define BSD 0
 #endif
 
@@ -527,6 +568,24 @@ extern Anyptr __MallocTemp__;
 #endif    /* P2C_H */
 
 
+/* 2022 Oct 08 tds fix  PART 2
+p2clib.c:77:9: note: previous implicit declaration is here
+        my_memcpy(dd, ss, n);
+        ^
+void my_memcpy(char, char, int);
+void my_memcpy(char *, char *, int);
+void my_memcpy(char*, char*, int);
+Anyptr my_memcpy(Anyptr d, Const Anyptr s, size_t n)
+void    *memcpy(void *__dst, const void *__src, size_t __n);
+void    *my_memcpy(void *__dst, const void *__src, size_t __n);
+2022 Oct 13
+SOLUTION: Take definitions from p2clib.c as follows:
+*/
+#ifdef __STDC__
+Anyptr my_memcpy(Anyptr d, Const Anyptr s, size_t n);
+#else
+Anyptr my_memcpy(d, s, n);
+#endif
 
 /* End. */
 

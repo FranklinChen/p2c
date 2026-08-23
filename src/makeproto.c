@@ -5,6 +5,8 @@
 /* Program to scan old-style source files and make prototypes */
 
 
+/* 2022 Oct 17 tds now required for C99 compile: */
+#include <stdlib.h>
 
 #include <stdio.h>
 #include <ctype.h>
