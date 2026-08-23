@@ -1,0 +1,159 @@
+.\" p2cc  Copyright 1993 Free Software Foundation
+.TH P2CC 1 "local"
+.SH NAME
+p2cc \- Pascal compiler using p2c
+.SH SYNOPSIS
+.B p2cc
+[ options and files ]
+.SH DESCRIPTION
+.I P2cc
+is a Pascal compiler that works by running
+.I p2c,
+the Pascal to C translator, followed by
+.I cc,
+the C compiler.
+.PP
+All command-line options and arguments are passed directly to
+the C compiler, except that files ending with
+.B .p
+or
+.B .pas
+are passed through
+.I p2c
+first, and that the options listed below are interpreted specially by
+.I p2cc.
+As usual, programs made up of several source modules can be compiled
+all on one
+.I p2cc
+command, or separately using
+.IB p2cc "\ -c"
+and then linked afterwards with a final
+.I p2cc
+command.
+.SH OPTIONS
+.TP
+.B \-p2c
+Translate
+.B .p
+and
+.B .pas
+files to C but do not compile the resulting
+.B .c
+files.  This is analogous to the
+.B \-S
+and
+.B \-c
+options of most C compilers, which stop with assembly language or
+unlinked object files, respectively.
+.TP
+.BI \-p2c option
+Pass
+.I option
+to
+.I p2c
+rather than to the C compiler.
+.TP
+.B \-O
+This switch is passed on to the C compiler to enable optional
+optimization of the program.  It also instructs
+.I p2c
+to do a few optimizations of its own, e.g., disabling certain
+run-time range checks.
+.TP
+.BI \-I dir
+The
+.B \-I
+switch is passed to both
+.I p2c
+and the C compiler, where it will identify places to look for
+Pascal interface texts or C
+.B .h
+files, respectively.
+.TP
+.B \-v
+Enable "verbose" mode.  This affects both
+.I p2c
+and the C compiler.
+.SH ENVIRONMENT
+The following environment variables may be used to affect the
+operation of
+.I p2cc.
+.TP
+.B P2CC_PAT
+This variable holds a regular expression for recognizing the names
+of Pascal files.  By default, it recognizes strings which end in
+.B .p
+or
+.B .pas.
+.TP
+.B P2CC_CC
+This holds the name of the command to run the C compiler.
+Default is
+.B cc.
+.TP
+.B P2CC_CCOPTS
+This holds additional arguments to be passed to the
+.B cc
+command, before the names of any source files.
+.TP
+.B P2CC_CCOPTS2
+These arguments are passed to the
+.B cc
+command
+.I after
+the names of source files.
+.TP
+.B P2CC_LIBP2C
+This is the name of the
+.B libp2c.a
+file holding
+.I p2c
+runtime routines.  Its default is
+.B \-lp2c,
+which causes the linker to look for
+.B libp2c.a
+in the usual places for libraries.
+.TP
+.B P2CC_P2C
+This holds the name of the command to run
+.I p2c.
+It is
+.B p2c
+by default.
+.TP
+.B P2CC_P2COPTS
+These are arguments to be passed to
+.I p2c
+on the command line.  The default specifies
+.B \-comp,
+which set the defaults for various
+.I p2c
+configuration options to be more suitable for compilation rather
+than translation, and
+.B \-local,
+which sets other options to work on the assumption that the output
+from
+.I p2c
+will be compiled and run on the same type of machine that ran
+.I p2c
+itself.
+.TP
+.B P2CC_SUFFIX
+This is the suffix to use for the names of temporary C source files.
+The default is
+.B ..c,
+ensuring that
+.I p2c
+will not inadvertently erase
+.B .c
+files in the same directory as the Pascal source files.  Note that
+if the
+.B \-p2c
+option is used, the suffix is forced instead to
+.B .c
+since the user has explicitly asked for C source files.
+.SH AUTHOR
+Dave Gillespie, daveg@synaptics.com.
+.SH SEE ALSO
+.BR p2c (1),
+.BR cc(1)

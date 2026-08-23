@@ -1,0 +1,132 @@
+
+
+
+P2CC(1)                  USER COMMANDS                    P2CC(1)
+
+
+
+NAME
+     p2cc - Pascal compiler using p2c
+
+SYNOPSIS
+     p2cc [ options and files ]
+
+DESCRIPTION
+     _P_2_c_c is a Pascal compiler that works  by  running  _p_2_c,  the
+     Pascal to C translator, followed by _c_c, the C compiler.
+
+     All command-line options and arguments are  passed  directly
+     to  the C compiler, except that files ending with .p or .pas
+     are passed through _p_2_c first, and that  the  options  listed
+     below  are interpreted specially by _p_2_c_c. As usual, programs
+     made up of several source modules can be compiled all on one
+     _p_2_c_c  command,  or  separately using _p_2_c_c -c and then linked
+     afterwards with a final _p_2_c_c command.
+
+OPTIONS
+     -p2c Translate .p and .pas files to C but do not compile the
+          resulting .c files.  This is analogous to the -S and -c
+          options of most C compilers, which stop  with  assembly
+          language or unlinked object files, respectively.
+
+     -p2c_o_p_t_i_o_n
+          Pass _o_p_t_i_o_n to _p_2_c rather than to the C compiler.
+
+     -O   This switch is passed on to the C  compiler  to  enable
+          optional   optimization   of   the  program.   It  also
+          instructs _p_2_c to do a few  optimizations  of  its  own,
+          e.g., disabling certain run-time range checks.
+
+     -I_d_i_r
+          The -I switch is passed to both _p_2_c and the C compiler,
+          where it will identify places to look for Pascal inter-
+          face texts or C .h files, respectively.
+
+     -v   Enable "verbose" mode.  This affects both _p_2_c and the C
+          compiler.
+
+ENVIRONMENT
+     The following environment variables may be  used  to  affect
+     the operation of _p_2_c_c.
+
+     P2CC_PAT
+          This variable holds a regular expression for  recogniz-
+          ing  the  names of Pascal files.  By default, it recog-
+          nizes strings which end in .p or .pas.
+
+     P2CC_CC
+          This holds the name of the command to run  the  C  com-
+          piler.  Default is cc.
+
+
+
+Sun Release 4.1        Last change: local                       1
+
+
+
+
+
+
+P2CC(1)                  USER COMMANDS                    P2CC(1)
+
+
+
+     P2CC_CCOPTS
+          This holds additional arguments to be passed to the  cc
+          command, before the names of any source files.
+
+     P2CC_CCOPTS2
+          These arguments are passed to the cc command _a_f_t_e_r  the
+          names of source files.
+
+     P2CC_LIBP2C
+          This is the name of the libp2c.a file holding _p_2_c  run-
+          time  routines.  Its default is -lp2c, which causes the
+          linker to look for libp2c.a in  the  usual  places  for
+          libraries.
+
+     P2CC_P2C
+          This holds the name of the command to run  _p_2_c.  It  is
+          p2c by default.
+
+     P2CC_P2COPTS
+          These are arguments to be passed to _p_2_c on the  command
+          line.   The  default  specifies  -comp,  which  set the
+          defaults for various _p_2_c configuration  options  to  be
+          more  suitable for compilation rather than translation,
+          and -local, which sets other options  to  work  on  the
+          assumption  that  the  output from _p_2_c will be compiled
+          and run on the  same  type  of  machine  that  ran  _p_2_c
+          itself.
+
+     P2CC_SUFFIX
+          This is the suffix to use for the names of temporary  C
+          source  files.   The  default is ..c, ensuring that _p_2_c
+          will not inadvertently  erase  .c  files  in  the  same
+          directory as the Pascal source files.  Note that if the
+          -p2c option is used, the suffix is forced instead to .c
+          since the user has explicitly asked for C source files.
+
+AUTHOR
+     Dave Gillespie, daveg@synaptics.com.
+
+SEE ALSO
+     p2c(1), cc(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sun Release 4.1        Last change: local                       2
+
+
+

@@ -1,0 +1,1158 @@
+
+trans.c,946
+int ISBOGUS(1054,30439
+#define ISBOGUS(1070,30761
+void closelogfile(609,19277
+void dumpexpr(1372,37678
+void dumpexpr_file(1464,39946
+void dumpmeaning(1150,32348
+void dumpstmt(1523,41172
+void dumpstmt_file(1532,41295
+void dumpsymtable(1176,32963
+void dumptype(1124,31765
+void dumptypename(1200,33421
+void dumptypename_file(1361,37544
+void exit_failure(1038,30218
+char *exprkindname(1100,31285
+#  define getenv(572,18516
+Static void initrc(92,2767
+void innerdumpstmt(1475,40069
+int main(665,20228
+char *meaningkindname(1078,30795
+void mem_summary(1562,41648
+Static void openlogfile(580,18626
+int outmem(1045,30269
+Static void postrc(298,8904
+Static int readrc(137,3864
+void saveoldfile(558,18249
+void showinitfile(631,19749
+char *stmtkindname(1111,31524
+void test_free(1614,43454
+anyptr test_malloc(1595,43087
+anyptr test_realloc(1624,43608
+char *typekindname(1089,31046
+void usage(652,20056
+void wrapup(1551,41543
+
+stuff.c,1167
+Static void cvcase(374,6261
+void debughook(30,877
+void fixfname(289,4936
+char *format_d(606,10514
+char *format_dd(652,11208
+char *format_ds(644,11084
+char *format_g(614,10630
+char *format_gen(424,7206
+char *format_none(599,10415
+char *format_s(622,10746
+char *format_sd(636,10960
+char *format_sds(675,11584
+char *format_ss(629,10849
+char *format_ssd(667,11452
+char *format_sss(660,11333
+#define getformat(363,5955
+void init_stuff(880,14439
+void lwc(715,12010
+char *my_strchr(748,12449
+char *my_strrchr(761,12587
+char *my_strtok(777,12774
+char *my_strtokq(795,13080
+long my_strtol(831,13699
+int my_tolower(697,11836
+int my_toupper(687,11744
+void removesuffix(311,5283
+char *stralloc(335,5572
+void strchange(345,5704
+int strcicmp(262,4510
+int strcincmp(239,4072
+Strlist *strlist_add(98,1956
+Strlist *strlist_append(61,1308
+Strlist *strlist_cifind(220,3849
+void strlist_delete(188,3353
+void strlist_eat(135,2571
+void strlist_empty(150,2771
+Strlist *strlist_find(205,3612
+Strlist *strlist_insert(80,1654
+void strlist_mix(120,2378
+void strlist_remove(169,3074
+char *strlower(735,12270
+char *strupper(723,12092
+void upc(707,11928
+
+out.c,1385
+#define ISBREAK(453,9215
+#define ISCLOSEP(452,9153
+#define ISOPENP(451,9075
+#define ISQUOTE(450,9028
+int adddeltas(272,5706
+int applydelta(283,5837
+int cur_column(236,5250
+void eatblanklines(353,6895
+void end_source(220,5075
+Static void flush_outbuf(360,6942
+void flush_outfilebuf(156,3980
+void flushcomments(1508,34144
+void futureindent(310,6242
+long getcurtime(1059,24523
+int grow_outfilebuf(145,3722
+int isembedcomment(1343,30900
+Static void leading_tab(334,6612
+int line_start(230,5196
+int lookback(246,5360
+int lookback_prn(256,5473
+char *makeCchar(1603,36167
+char *makeCstring(1594,36063
+Static void makeedit(562,11034
+Static int measurechars(547,10850
+void moreindent(294,5981
+void out_n_spaces(1229,28967
+void out_spaces(1238,29037
+void outcomment(1471,33563
+Strlist *outcomments(1354,31179
+void output(1080,24934
+void outsection(1334,30805
+void outtrailcomment(1486,33738
+Static int parencount(579,11308
+int parse_breakstr(1000,23755
+int parsedelta(317,6356
+#define putc_outf(167,4173
+void puts_outf(173,4297
+#define randtest(616,12475
+char *rawCstring(1538,34724
+Static int readparens(483,9772
+Static int readquotes(455,9316
+void select_outfile(189,4557
+void setup_out(111,2961
+void singleindent(302,6111
+void start_source(212,4957
+void testlinebreaker(1277,29906
+Static int trybreakline(635,12949
+Static void unedit(572,11214
+
+comment.c,447
+void addnote(283,5711
+void attach_comments(189,3819
+Static void attach_mark(169,3469
+void changecomments(498,10520
+int commentlen(58,1402
+void commentline(249,4949
+int commentvisible(71,1544
+Strlist *extractcomment(474,10072
+Strlist *findcomment(459,9795
+Strlist *fixbeginendcomment(133,2802
+Strlist *grabcomment(340,7261
+int matchcomment(433,9278
+void setcommentkind(240,4817
+void setup_comment(46,1250
+void steal_comments(89,1897
+
+lex.c,2379
+Static Symbol *Pkeyword(189,4293
+Static Symbol *Pkeywordposs(207,4574
+void alreadydef(734,16225
+void badinclude(1297,27839
+void badtypes(755,16573
+void begincommenting(2634,64297
+void beginerror(503,11729
+void check_unused_macros(1706,38556
+int checkeatnote(470,11182
+void checkkeyword(3662,92877
+void checkmodulewords(3673,93027
+void clearprogress(958,20121
+Static void comment(2281,55886
+void counterror(514,11886
+void defmacro(1567,34648
+Static void deterministic(322,8139
+void endcommenting(2656,64678
+void endnote(610,14017
+void error(531,12309
+void expected(681,15566
+void expecttok(688,15672
+char *findaltname(873,18387
+Symbol *findsymbol(923,19358
+Symbol *findsymbol_opt(900,18936
+char *fixpascalname(69,1590
+void get_C_string(2554,61800
+char getchartok(2466,60243
+Static int getflag(2451,60064
+char *getinlinepart(2414,59241
+void getline(1047,22000
+char *getparenstr(2481,60499
+void gettok(2728,65611
+void gettok(2752,66193
+int handle_include(1306,28000
+void include_as_import(1159,24816
+void init_lex(406,9930
+void interror(553,12922
+void intwarning(575,13338
+void leadingcomments(2510,61096
+Static void makePascalwords(227,4903
+Static void makeglobword(106,2234
+Static void makekeyword(94,2080
+Static void makekeywords(119,2390
+void needtok(696,15765
+Static void nosideeff(334,8293
+void note(594,13719
+Static int parsecomment(1728,39185
+int peeknextchar(2694,65166
+char *peeknextptr(2668,64799
+int peeknextword(2708,65339
+void pop_input(1190,25407
+void progress(964,20171
+Static void push_input(1116,23876
+void push_input_file(1140,24451
+void push_input_strlist(1171,25088
+Static void recordsideeffects(347,8446
+void replacestrings(997,21060
+void saveinputcomment(2644,64417
+void setup_lex(434,10430
+void showendnotes(626,14384
+int skipcloseparen(846,17952
+int skipcomma(858,18171
+int skipopenparen(837,17846
+void skipparens(768,16694
+void skippasttoken(829,17774
+void skippasttoken2(804,17446
+void skippasttotoken(813,17585
+#define skipspc(1726,39136
+void skiptotoken(822,17707
+void skiptotoken2(794,17239
+void symclass(748,16448
+char *tok_name(660,15041
+int turbo_directive(1344,28861
+void undefsym(741,16340
+int undooption(1228,26290
+void valrange(761,16631
+void warning(560,13059
+int wexpected(705,15870
+int wexpecttok(713,15998
+int wneedtok(723,16119
+Static void zgettok(2750,66165
+
+parse.c,2923
+#define addstmt(419,7228
+Static int anygotos(4260,118190
+#define checkWord(4535,126129
+Static int checkcomma_expr(3748,106066
+Static void checkcommas(3823,108430
+Static int checkelimexpr(3065,82117
+Static int checkelims(3093,82680
+int checkexprchanged(3999,113035
+Static void checkprops(2834,76923
+Static void checkpropsexpr(2663,72931
+Static void checkpropzero(2606,71791
+Static int checkreturns(1894,53085
+Static int checkvarchangeable(3866,109255
+int checkvarchanged(3974,112368
+int checkvarchangedexpr(3886,109551
+int checkvaroffset(4109,115028
+void checkvaroffsetexpr(4042,113825
+void checkvaroffsetstmt(4094,114744
+Expr *chg_printf(2348,66339
+Static void cleanheadername(4889,135859
+Stmt *close_files_to_ctx(307,5248
+Stmt *copystmt(244,4397
+Static int deadendblock(2088,58649
+void do_include(5021,139389
+void eatstmt(3244,86417
+void echobreak(43,1060
+void echoprocname(84,1704
+void echoword(53,1160
+int expr_is_bool(2108,59171
+Static void findinits(4274,118386
+Static int findinitscheckexpr(4223,117477
+Static int findinitscheckstmt(4239,117740
+Static void findinitsexpr(4211,117244
+Static void findpropchecks(2495,69719
+Static void findpropchecksexpr(2463,69080
+Static int findpropexpr(2440,68626
+void fixblock(3269,86778
+Expr *flow_fixexpr(2557,70796
+void flowblock(3185,84883
+Static void forward_decl(94,1775
+void free_stmt(155,3078
+int haslabels(3257,86607
+int implies(2137,60021
+void infiniteloop(2255,64249
+Expr *initfilevar(4128,115371
+void initfilevars(4158,116075
+Static int isescape(2069,57987
+Stmt *makestmt(172,3333
+Stmt *makestmt_assign(204,3834
+Stmt *makestmt_call(194,3717
+Stmt *makestmt_if(214,3983
+Stmt *makestmt_seq(228,4184
+Expr *mix_printf(2384,67379
+Stmt *mixassignments(2026,56780
+void movetoend(4655,129086
+void need_forward_decl(134,2757
+#define newstmt(423,7313
+void nukestmt(263,4749
+Static void out_block(1323,36304
+Static void out_function(4537,126191
+Static void out_include(4876,135577
+Static void outnl(1316,36203
+#define outspnl(1311,36125
+void p_block(5090,141023
+Static Stmt *p_body(4386,121129
+Static void p_function(4697,129928
+Static void p_import(4939,136834
+Static int p_module(5309,146094
+Static void p_moduleinit(5246,144806
+Static void p_nested_module(5282,145576
+void p_program(5566,152861
+int p_search(5464,150227
+Static Stmt *p_stmt(438,7582
+Expr *print_func(2288,64943
+int printnl_func(2311,65461
+Static int propcheckexprokay(2418,68233
+int proveexprprop(2509,69952
+void replaceexpr(2004,56301
+Expr *replaceexprexpr(1973,55444
+Static void scanfwdparams(4682,129740
+void setup_parse(32,926
+int simplefor(377,6501
+int simplewith(362,6266
+Static void skiptomodule(5230,144535
+Static void skipunitheader(5222,144428
+void splicestmt(274,4871
+int stmtcount(291,5075
+int tryfuncmacro(388,6676
+Static int tryimport(4911,136187
+Static int usebraces(1266,35094
+void withrecordtype(337,5911
+
+decl.c,4006
+void activatemeaning(685,19308
+Meaning *addfield(1192,31576
+Meaning *addmeaning(1133,30575
+Meaning *addmeaningafter(1142,30691
+Meaning *addmeaningas(1111,30168
+Expr *arraysize(1513,39772
+void canceltempvar(5914,157956
+Type *canonicaltype(1952,51913
+Static int checkstructconst(2026,54020
+int checkvarmac(2757,73422
+Static int checkvarmacdef(2734,72999
+void decl_comments(3315,87067
+Static void declare_args(1616,42266
+void declarebigfile(2292,61025
+void declarefiles(2113,56517
+void declaresubtypes(5220,140498
+void declaretype(5261,141460
+void declaretypes(5388,144389
+void declarevar(2642,70331
+int declarevars(2771,73695
+Static void fielddecl(3214,84564
+Expr *filebasename(1303,33945
+Type *filebasetype(1293,33801
+int fileisbuffered(1332,34529
+Expr *filenamepart(1313,34093
+Type *findbasetype(1495,39459
+Type *findbasetype_(1344,34714
+Meaning *findfieldname(4686,124978
+Symbol *findlabelsym(4629,123609
+Static Meaning *findstandardmeaning(70,1611
+void forget_ctx(772,21253
+void freestmttemps(5876,157216
+void freetempvar(5893,157511
+void handle_nameof(813,22186
+Static void handleabsolute(5532,147831
+Static void handlebrackets(5498,146949
+int identicaltypes(1978,52709
+void ignore_attributes(3883,102642
+void import_ctx(634,18349
+Static void initmeaning(839,22898
+int isfiletype(1255,33083
+Meaning *isfilevar(1275,33508
+int israndomfile(1265,33320
+int issafename(878,23737
+void makefakestruct(3984,105017
+Type *makepointertype(3087,81803
+Type *makesettype(3039,80788
+Meaning *makespecialfunc(189,3953
+Meaning *makespecialproc(136,2836
+Meaning *makespecialvar(244,5073
+Meaning *makestandardfunc(212,4373
+Static Meaning *makestandardmeaning(89,1950
+Meaning *makestandardproc(158,3261
+Static Type *makestandardtype(111,2452
+Meaning *makestmttempvar(5852,156819
+Type *makestringtype(3062,81226
+void makestructtag(3337,87516
+Type *makesubrangetype(3022,80522
+Meaning *maketempvar(5794,154996
+Type *maketype(2999,80135
+void makevarstruct(2960,79091
+Meaning *markstmttemps(5870,157130
+Static int mixable(2057,54884
+Static void nameexternalvar(5485,146706
+Static Expr *nullspecialfunc(180,3751
+Static Stmt *nullspecialproc(127,2645
+Static Expr *nullspecialvar(235,4851
+Static Expr *nullstandardfunc(205,4217
+Static Stmt *nullstandardproc(151,3089
+int onewordstring(2507,67015
+int onewordtype(2516,67116
+void out_argdecls(2874,76611
+void out_type(2495,66743
+void outbasetype(2311,61369
+void outdeclarator(1750,46107
+void outfieldlist(2172,57720
+Static Type *p_arraydecl(3605,94605
+void p_attributes(3822,101267
+void p_commondecl(5741,153941
+Static Type *p_conformant_array(3770,100223
+Value p_constant(3104,82027
+Expr *p_constarray(4864,129608
+void p_constdecl(5031,134063
+Expr *p_constrecord(4716,125564
+Expr *p_conststring(4951,132246
+Static void p_fieldlist(3360,87925
+Type *p_funcdecl(4388,116355
+void p_labeldecl(4659,124467
+void p_mech_spec(3921,103524
+Type *p_modula_subrange(3941,103991
+Expr *p_subconst(4974,132757
+Type *p_type(4006,105515
+void p_typedecl(5410,144824
+void p_valuedecl(5758,154225
+void p_vardecl(5609,149848
+int packedsize(3150,82763
+void perm_import(654,18802
+void pop_imports(620,18129
+void popctx(741,20575
+void predeclare_varstruct(1599,41894
+int preservetype(5374,144065
+Type *promote_type(1543,40613
+Type *promote_type_bin(1575,41356
+int push_imports(603,17809
+void pushctx(711,19904
+void readdmeaning(1178,31359
+Static void realignfields(3262,86031
+int record_is_union(2164,57593
+void redeclarevars(2857,76262
+void setup_decl(261,5311
+void setupfilevar(5578,149255
+void setupmeaning(914,24561
+int similartypes(2011,53683
+int size_attributes(3895,102917
+char *storageclassname(2603,69590
+int tinyexpr(2037,54291
+static void tryrealignfields(3289,86610
+int typebits(3125,82352
+void unaddmeaning(1161,31094
+void unimport(668,19031
+Meaning *validatedtype(5596,149611
+char *variantfieldname(2154,57447
+#define varkind(2769,73612
+int varstorageclass(2560,68396
+
+expr.c,4688
+#define CHECKSIZE(5259,134892
+#define ISCONST(2038,45322
+#define MOVCONST(2039,45387
+Expr *bumpstring(4263,105165
+int checkconst(1130,24166
+Expr *checknil(3410,84664
+int checkstring(542,10737
+int checkvarinlists(3426,85068
+Expr *cleansprintf(5010,128631
+Static Expr *commute(2082,46475
+Expr *copyexpr(760,15823
+Value copyvalue(49,1151
+void deletearg(942,20259
+void delsimparg(1012,21929
+int deterministic_func(4040,100733
+Expr *distribute_plus(2280,53073
+Static Expr *docast(1304,27601
+Expr *dodivmod(2628,61681
+Static Expr *dolongcast(1524,33318
+Expr *eatcasts(5622,144617
+Expr *enum_to_int(1934,42793
+Value eval_expr(5544,143387
+Value eval_expr_consts(5551,143459
+Static Value eval_expr_either(5347,137515
+Value eval_expr_pasc(5564,143651
+int expr_has_address(3399,84475
+int expr_is_const(5572,143729
+int expr_is_lvalue(3366,83774
+int expr_is_neg(1875,41686
+int expr_looks_neg(1834,40814
+int expr_neg_cost(1890,41945
+int expr_not_cost(2795,65797
+int exprdepends(3994,99903
+int exprdependsvar(3953,99162
+int exprequiv(857,17960
+int exprlongness(1700,38230
+int exproccurs(4114,102120
+int exprsame(797,16636
+int exprspeed(3811,95734
+Expr *force_signed(5216,133968
+Expr *force_unsigned(5237,134410
+void free_value(27,827
+void freeexpr(392,8253
+int gcd(2512,59198
+Expr *gentle_cast(1415,30497
+Expr *grabarg(994,21626
+void insertarg(967,20923
+int isarithkind(4295,105732
+int ischartype(2068,46194
+int isconstantexpr(1232,26148
+int isconstexpr(1214,25846
+int isliteralconst(1175,25080
+Meaning *isretvar(4239,104564
+Meaning *istempprocptr(2957,69708
+int istempsprintf(4749,120847
+Meaning *istempvar(4212,104129
+int long_type(273,6152
+Value make_ord(291,6442
+Expr *makeexpr(424,8785
+Expr *makeexpr_SETIO(728,15193
+Expr *makeexpr_actcast(1369,29304
+Expr *makeexpr_addr(3583,89044
+Expr *makeexpr_addrf(3677,91726
+Expr *makeexpr_addrstr(3666,91513
+Expr *makeexpr_and(3243,80051
+Expr *makeexpr_arglong(1740,39022
+Expr *makeexpr_assign(4309,106250
+Expr *makeexpr_bicall_0(599,11954
+Expr *makeexpr_bicall_1(617,12397
+Expr *makeexpr_bicall_2(637,12882
+Expr *makeexpr_bicall_3(658,13404
+Expr *makeexpr_bicall_4(680,13963
+Expr *makeexpr_bicall_5(703,14559
+Expr *makeexpr_bin(454,9306
+Expr *makeexpr_cast(1384,29638
+Expr *makeexpr_char(489,10012
+Expr *makeexpr_charcast(1479,32464
+Expr *makeexpr_comma(4674,119363
+Expr *makeexpr_concat(4898,125028
+Expr *makeexpr_cond(3349,83469
+Expr *makeexpr_ctx(5202,133778
+Expr *makeexpr_div(2672,62776
+Expr *makeexpr_divide(2467,58142
+Expr *makeexpr_dot(5088,130685
+Expr *makeexpr_dotq(5135,132224
+Expr *makeexpr_forcelongness(1782,39769
+Expr *makeexpr_hat(3485,86322
+Expr *makeexpr_inc(2264,52761
+Expr *makeexpr_index(3704,92572
+Expr *makeexpr_long(496,10095
+Expr *makeexpr_longcast(1710,38393
+Expr *makeexpr_lstring(515,10330
+Expr *makeexpr_minus(2246,52180
+Expr *makeexpr_mod(2744,64518
+Expr *makeexpr_name(569,11236
+Expr *makeexpr_neg(1961,43252
+Expr *makeexpr_nil(5189,133617
+Expr *makeexpr_not(2836,66504
+Expr *makeexpr_or(3286,81493
+Expr *makeexpr_ord(1801,40109
+Expr *makeexpr_plus(2125,47699
+Expr *makeexpr_range(3330,83004
+Expr *makeexpr_real(503,10182
+Expr *makeexpr_rel(2998,70763
+Expr *makeexpr_rem(2779,65465
+Expr *makeexpr_setbits(584,11512
+Expr *makeexpr_sizeof(3740,93584
+Expr *makeexpr_sprintfify(4761,121124
+Expr *makeexpr_sqr(2442,57596
+Expr *makeexpr_string(530,10569
+Expr *makeexpr_stringcast(1505,33018
+Expr *makeexpr_stringify(2987,70587
+Expr *makeexpr_substring(5072,130226
+Expr *makeexpr_times(2367,55490
+Expr *makeexpr_type(3729,93450
+Expr *makeexpr_un(439,9020
+Expr *makeexpr_unlongcast(1755,39260
+Expr *makeexpr_unsprintfify(4830,123402
+Expr *makeexpr_val(471,9632
+Expr *makeexpr_var(555,10983
+Type *mixsets(2910,68086
+Expr *neg_inside_sum(1949,43104
+int negsigns(2531,59443
+int noargdependencies(3892,97861
+int noargsideeffects(4065,101156
+int nodependencies(3906,98059
+int nosideeffects(4082,101496
+int nosideeffects_func(4016,100287
+int ord_range(363,7801
+void ord_range_expr(333,7131
+Type *ord_type(246,5751
+long ord_value(309,6721
+long po2m1(4282,105582
+int possiblesigns(2540,59549
+int realint(1111,23805
+int realzero(1103,23675
+void requirefilebuffer(3458,85655
+Expr *resimplify(1039,22351
+Expr *singlevar(4129,102458
+int sprintflength(4868,124375
+int strhasnull(4735,120677
+int strlapfunc(4188,103715
+int strmax(4692,119606
+Expr *strmax_func(5147,132388
+int structuredfunc(4161,103097
+Meaning *totempvar(4229,104448
+Type *true_type(2042,45532
+long type_sizeof(5261,134978
+Expr *un_sign_extend(3571,88864
+Value value_cast(195,4451
+char *value_name(111,2230
+int valuesame(80,1676
+
+pexpr.c,1852
+#define EXTRASPACE(3003,92661
+#define NICESPACE(3004,92715
+Expr *accumulate_strlit(1076,30730
+Static void bindnames(281,7792
+#define bitOp(2946,91251
+#define checkbreak(3054,93874
+#define divOp(2958,91646
+Expr *dots_n_hats(26,827
+Expr *expr_reference(347,9538
+Expr *fake_dots_n_hats(231,6653
+Expr *fixexpr(2518,74093
+void func_reference(993,28695
+Static int incompat(2961,91698
+int istypespec(2003,60507
+#define logOp(2950,91364
+Static Expr *makesmallsetconst(463,12844
+#define mathOp(2955,91523
+Type *nametotype(1992,60349
+Static void out_ctx(3060,94014
+void out_expr(3959,119278
+void out_expr_bool(4013,119926
+void out_expr_factor(3979,119495
+void out_expr_parens(3989,119589
+void out_expr_stmt(4002,119764
+void out_expr_top(3969,119383
+void out_field(3182,96964
+void out_var(3107,95263
+#define outop(3046,93677
+#define outop2(3050,93774
+Static void outop3(3027,93321
+Expr *p_andexpr(1933,59103
+Expr *p_expr(1960,59700
+Static Expr *p_factor(1162,32937
+Expr *p_funcarglist(705,20669
+Expr *p_funccall(1035,29707
+Expr *p_index(173,4957
+Expr *p_memcall(1006,28986
+Expr *p_noarglist(976,28342
+Expr *p_ord_expr(456,12768
+Static Expr *p_powterm(1497,43323
+Expr *p_rexpr(1769,51942
+Expr *p_setfactor(534,15217
+Expr *p_sexpr(1659,48240
+Static Expr *p_term(1558,44932
+Expr *p_variable(361,9746
+Expr *packset(478,13092
+Expr *pascaltypecast(1125,31931
+Expr *pc_expr(2484,73617
+Expr *pc_expr2(2284,68246
+Expr *pc_expr_str(2491,73664
+Expr *pc_factor(2116,63548
+Expr *pc_parentype(2046,61744
+#define pc_prec(2282,68186
+Expr *pc_typename(2068,62253
+#define relOp(2952,91411
+Expr *replacemacargs(954,27872
+Static int scanfield(3142,95844
+#define setprec(3006,92770
+#define setprec2(3011,92868
+#define setprec3(3018,93067
+#define shfOp(2948,91316
+void var_reference(308,8242
+Static void wrexpr(3202,97476
+
+funcs.c,8116
+Type *argbasetype(81,1537
+Static Stmt *assignfilename(484,12727
+Static Expr *checkfilename(416,10104
+Static char *choose_free_func(1643,39908
+Type *choosetype(94,1750
+Expr *convert_offset(106,1922
+Expr *convert_size(181,3923
+void decl_builtins(5480,138747
+Stmt *doseek(3215,75411
+Static Expr *file_iofunc(1935,46957
+char *find_special_variant(1577,38543
+Static Stmt *fixscanf(3254,76480
+Static Expr *func_abs(261,5767
+Static Expr *func_addr(304,7533
+Static Expr *func_addtopointer(351,8698
+Static Expr *func_arccos(751,19952
+Static Expr *func_arcsin(758,20064
+Static Expr *func_arctan(765,20176
+Static Expr *func_arctanh(776,20461
+Static Expr *func_asr(803,20988
+Static Expr *func_bin(858,22014
+Static Expr *func_binary(866,22139
+Static Expr *func_bitnext(935,23510
+Static Expr *func_bitsize(929,23446
+Static Expr *func_blockread(942,23575
+Static Expr *func_blockwrite(975,24322
+Static Expr *func_bsl(1151,28941
+Static Expr *func_bsr(1167,29204
+Static Expr *func_btst(1183,29483
+Static Expr *func_byte_offset(1270,31316
+Static Expr *func_byteread(1206,29913
+Static Expr *func_bytewrite(1238,30613
+Static Expr *func_chr(1343,33159
+Static Expr *func_concat(1405,34738
+Static Expr *func_copy(1422,35025
+Static Expr *func_cos(1446,35934
+Static Expr *func_cosh(1453,36042
+Static Expr *func_dec(1498,36758
+Static Expr *func_eof(1801,43723
+Static Expr *func_eoln(1814,43902
+Static Expr *func_exp(1709,41388
+Static Expr *func_expo(1717,41497
+Static Expr *func_fcall(1958,47489
+Static Expr *func_filepos(2012,49140
+Static Expr *func_filesize(2019,49213
+Static Expr *func_float(2058,50043
+Static Expr *func_frac(2083,50515
+Static Expr *func_hex(2292,55700
+Static Expr *func_hi(2320,56357
+Static Expr *func_high(2331,56539
+Static Expr *func_hiword(2353,57014
+Static Expr *func_iaddress(344,8611
+Static Expr *func_int(2417,58431
+Static Expr *func_lint(2452,59055
+Static Expr *func_ln(2520,60169
+Static Expr *func_lo(2462,59177
+Static Expr *func_log(2528,60277
+Static Expr *func_loophole(2472,59369
+Static Expr *func_lower(2489,59625
+Static Expr *func_loword(2509,59993
+Static Expr *func_lsl(826,21499
+Static Expr *func_lsr(841,21743
+Static Expr *func_max(2536,60388
+Static Expr *func_maxavail(2572,61154
+Static Expr *func_maxpos(2581,61274
+Static Expr *func_memavail(2588,61346
+Static Expr *func_min(2663,62835
+Static Expr *func_new_turbo(2770,65621
+Static Expr *func_oct(2851,67939
+Static Expr *func_octal(2858,68012
+Static Expr *func_odd(2877,68437
+Static Expr *func_ofs(2889,68684
+Static Expr *func_ord(2923,69237
+Static Expr *func_ord4(2937,69412
+Static Expr *func_pad(3005,71164
+Static Expr *func_paramcount(3045,72340
+Static Expr *func_paramstr(3055,72513
+Static Expr *func_pi(3073,72876
+Static Expr *func_pos(3110,73558
+Static Expr *func_position(3137,73994
+Static Expr *func_pred(3144,74068
+Static Expr *func_ptr(3128,73895
+Static Expr *func_pwroften(3191,75145
+Static Expr *func_random(3844,98198
+Static Expr *func_round(3870,98682
+Static Expr *func_scan(3962,101257
+Static Expr *func_scaneq(3989,101755
+Static Expr *func_scanne(3999,101953
+Static Expr *func_seekeof(4036,102695
+Static Expr *func_seekeoln(4053,103029
+Static Expr *func_seg(2902,68931
+Static Expr *func_self(4070,103361
+Static Expr *func_sin(4131,104798
+Static Expr *func_sinh(4138,104906
+Static Expr *func_sizeof(4146,105017
+Static Expr *func_sngl(2048,49928
+Static Expr *func_sqr(4419,111084
+Static Expr *func_sqrt(4426,111166
+Static Expr *func_statusv(4190,106037
+Static Expr *func_str_hp(4197,106125
+Static Expr *func_strlen(4329,109182
+Static Expr *func_strltrim(4337,109292
+Static Expr *func_strmax(4346,109482
+Static Expr *func_strpos(4354,109568
+Static Expr *func_strrpt(4374,109983
+Static Expr *func_strrtrim(4390,110546
+Static Expr *func_succ(4400,110783
+Static Expr *func_swap(4434,111277
+Static Expr *func_tan(4450,111521
+Static Expr *func_tanh(4457,111629
+Static Expr *func_trunc(4465,111740
+Static Expr *func_typeof(4473,111842
+Static Expr *func_uand(4503,112404
+Static Expr *func_ub(4519,112652
+Static Expr *func_udec(4552,113416
+Static Expr *func_uint(2435,58869
+Static Expr *func_unot(4559,113489
+Static Expr *func_uor(4573,113692
+Static Expr *func_upcase(4589,113938
+Static Expr *func_upper(4597,114050
+Static Expr *func_uround(3949,100993
+Static Expr *func_utrunc(4495,112300
+Static Expr *func_uxor(4617,114418
+Static Expr *func_val_modula(4633,114666
+Static Expr *func_xor(5448,138180
+char *getstring(51,1068
+Static Expr *handle_bitsize(885,22565
+Static Stmt *handle_modula_write(5168,132125
+Static Expr *handle_new(2792,66130
+Static Expr *handle_vax_hex(2210,53834
+Static Stmt *handleopen(522,13506
+Static Stmt *handleread_bin(3654,93359
+Static Stmt *handleread_text(3377,80604
+Static Stmt *handlewrite_bin(5093,130027
+Static Stmt *handlewrite_text(4953,124682
+Static Stmt *handlewriteln(5250,133592
+Static Expr *iofunc(1740,41898
+int is_std_file(1731,41770
+int isvar(41,956
+Static char *makeenumnames(4707,116367
+Static Expr *makefgets(3328,79160
+Static Expr *makegetchar(3243,76259
+Expr *p_parexpr(65,1309
+Static Expr *parse_constructor(1616,39325
+void parse_special_variant(1518,37313
+Static Stmt *proc_append(744,19892
+Static Stmt *proc_argv(784,20576
+Stmt *proc_assert(380,9327
+Static Stmt *proc_assign(506,13244
+Static Stmt *proc_bclr(1106,28051
+Static Stmt *proc_blockread(1009,25073
+Static Stmt *proc_blockwrite(1058,26553
+Static Stmt *proc_bset(1129,28517
+Static Stmt *proc_call(1298,31882
+Static Stmt *proc_close(1357,33415
+Static Stmt *proc_cycle(1461,36153
+Static Stmt *proc_date(1468,36220
+Static Stmt *proc_dec(1480,36428
+Static Stmt *proc_delete(1505,36830
+Static Stmt *proc_dispose(1673,40432
+Static Stmt *proc_escape(1827,44082
+Static Stmt *proc_excl(1873,45399
+Stmt *proc_exit(1898,46037
+Static Stmt *proc_fillchar(2026,49280
+Static Stmt *proc_flush(2068,50167
+Static Stmt *proc_freemem(2096,50793
+Static Stmt *proc_get(2120,51339
+Static Stmt *proc_getmem(2148,52112
+Static Stmt *proc_gotoxy(2188,53344
+Static Stmt *proc_halt(2198,53608
+Static Stmt *proc_inc(2364,57205
+Static Stmt *proc_incl(2382,57534
+Static Stmt *proc_insert(2406,58126
+Static Stmt *proc_leave(2445,58991
+Static Stmt *proc_message(5316,134983
+Static Stmt *proc_move(2699,63601
+Static Stmt *proc_move_fast(2714,64215
+Static Stmt *proc_new(2746,65092
+Static Stmt *proc_open(2916,69179
+Static Stmt *proc_overprint(5296,134791
+Static Stmt *proc_pack(2951,69610
+Static Stmt *proc_page(3022,71702
+Static Stmt *proc_prompt(5303,134857
+Static Stmt *proc_put(3163,74371
+Static Stmt *proc_randomize(3860,98518
+Static Stmt *proc_read(3685,94238
+Static Stmt *proc_readdir(3716,94927
+Static Stmt *proc_readln(3737,95308
+Static Stmt *proc_readv(3767,96060
+Static Stmt *proc_reset(3200,75290
+Static Stmt *proc_rewrite(3207,75349
+Static Stmt *proc_seek(4010,102152
+Static Stmt *proc_setstrlen(4088,103738
+Static Stmt *proc_settextbuf(4105,104053
+Static Stmt *proc_str_turbo(5409,137450
+Static Stmt *proc_strappend(4206,106314
+Static Stmt *proc_strdelete(4222,106598
+Static Stmt *proc_strinsert(4263,107652
+Static Stmt *proc_strmove(4301,108563
+Static Stmt *proc_strread(3784,96305
+Static Stmt *proc_strwrite(5351,135665
+Static Stmt *proc_time(5436,137972
+Static Stmt *proc_unpack(3895,99435
+Static Stmt *proc_val_turbo(4650,114910
+Static Stmt *proc_write(5137,131432
+Static Stmt *proc_writecard(5198,132846
+Static Stmt *proc_writedir(5229,133209
+Static Stmt *proc_writehex(5210,132991
+Static Stmt *proc_writeint(5204,132919
+Static Stmt *proc_writeln(5310,134920
+Static Stmt *proc_writeoct(5216,133063
+Static Stmt *proc_writereal(5222,133135
+Static Stmt *proc_writev(5323,135047
+void setup_funcs(31,883
+Static Stmt *skipeoln(3346,79554
+Static int usenewdelete(1661,40192
+Static Expr *var_mem(2597,61466
+Static Expr *var_meml(2641,62375
+Static Expr *var_memw(2619,61917
+Static Expr *var_port(3080,72953
+Static Expr *var_portw(3095,73253
+Stmt *wrapopencheck(390,9466
+Expr *writeelement(4749,117396
+Static Expr *writestrelement(4687,115731
+
+dir.c,318
+Static void _setup(73,1679
+#define _setup(81,1816
+int boolean_bicall(186,3868
+Expr *fix_bicall(169,3572
+Expr *fix_expression(148,3010
+void fix_parameters(116,2405
+Stmt *fix_statement(133,2773
+void init_dir(41,1187
+unsigned int safemask_bicall(207,4409
+void setup_dir(55,1314
+int sideeffects_bicall(243,5159
+
+hpmods.c,137
+void hpmods(122,2863
+Static Stmt *proc_freadbytes(30,850
+Static Stmt *proc_fwritebytes(62,1700
+Static void setup_sysglobals(103,2578
+
+citmods.c,2452
+Static int check0_31(356,9631
+void citmods(1067,27539
+Static Expr *func_charlower(663,17452
+Static Expr *func_charupper(654,17308
+Static Expr *func_imax(613,16512
+Static Expr *func_imin(604,16360
+Static Expr *func_na_add(627,16869
+Static Expr *func_na_and(284,8291
+Static Expr *func_na_asl(497,13980
+Static Expr *func_na_bic(296,8503
+Static Expr *func_na_comp(131,4467
+Static Expr *func_na_hibits(479,13454
+Static Expr *func_na_lobits(466,13101
+Static Expr *func_na_lsl(529,14835
+Static Expr *func_na_mask(343,9366
+Static Expr *func_na_memavail(272,8117
+Static Expr *func_na_not(334,9223
+Static Expr *func_na_or(310,8801
+Static Expr *func_na_po2(454,12833
+Static Expr *func_na_scaneq(146,4998
+Static Expr *func_na_scanne(163,5398
+Static Expr *func_na_sub(636,17034
+Static Expr *func_na_test(374,10134
+Static Expr *func_na_xor(322,9011
+Static Expr *func_stderr(1024,26816
+Static Expr *func_stdin(1012,26650
+Static Expr *func_stdout(1018,26732
+Static Expr *func_strbegins(815,21554
+Static Expr *func_strchar(769,20632
+Static Expr *func_strcmp(901,23999
+Static Expr *func_strcontains(841,22324
+Static Expr *func_strequal(888,23700
+Static Expr *func_strhex(726,19226
+Static Expr *func_strint(677,17789
+Static Expr *func_strint2(691,18115
+Static Expr *func_strljust(909,24119
+Static Expr *func_strpart(880,23587
+Static Expr *func_strreadint(780,20870
+Static Expr *func_strreadreal(791,21110
+Static Expr *func_strreal(758,20394
+Static Expr *func_strrjust(921,24424
+Static Expr *func_strsub(858,22824
+Static Stmt *proc_fixfname(990,26123
+Static Stmt *proc_forcefname(999,26304
+Static Stmt *proc_m_color(1039,26930
+Static Stmt *proc_na_alloc(236,7492
+Static Stmt *proc_na_bfand(562,15708
+Static Stmt *proc_na_bfbic(580,16127
+Static Stmt *proc_na_bfor(588,16205
+Static Stmt *proc_na_bfxor(596,16282
+Static Stmt *proc_na_clear(424,11756
+Static Stmt *proc_na_dispose(213,6935
+Static Stmt *proc_na_exch(112,3925
+Static Stmt *proc_na_fill(64,2120
+Static Stmt *proc_na_fillbyte(46,1473
+Static Stmt *proc_na_free(262,8004
+Static Stmt *proc_na_move(92,3103
+Static Stmt *proc_na_new(180,5798
+Static Stmt *proc_na_outeralloc(253,7880
+Static Stmt *proc_na_set(395,10779
+Static Stmt *proc_return(647,17250
+Static Stmt *proc_strappendc(800,21257
+Static Stmt *proc_strlist_add(948,25124
+Static Stmt *proc_strlist_append(959,25443
+Static Stmt *proc_strlist_insert(970,25768
+Static Stmt *proc_strnew(936,24809
+
+p2clib.c,1589
+#define Isspace(20,416
+void PASCAL_MAIN(40,671
+long *P_addset(722,11802
+long *P_addsetr(743,12213
+int P_eof(469,7286
+int P_eoln(492,7640
+long *P_expset(839,14019
+int P_getcmdline(867,14405
+long P_imax(182,2623
+long P_imin(191,2703
+int P_inset(709,11568
+long P_maxpos(584,8872
+long P_packset(852,14183
+int P_peek(452,6973
+Void P_readlnpaoc(561,8575
+Void P_readpaoc(539,8306
+long *P_remset(776,12876
+double P_rmax(201,2784
+double P_rmin(210,2868
+long *P_setcpy(820,13660
+long *P_setdiff(673,10803
+int P_setequal(792,13156
+long *P_setint(660,10506
+long *P_setunion(642,10145
+long *P_setxor(690,11180
+int P_subset(806,13404
+Void P_sun_argv(945,15667
+Char *P_trimname(601,9140
+Void TimeStamp(888,14719
+Void VAXdate(908,15150
+Void VAXtime(924,15420
+int _CaseCheck(969,15955
+int _EscIO(1091,19058
+int _EscIO2(1098,19138
+int _Escape(1072,18682
+int _NilCheck(974,16001
+int _OutMem(964,15912
+char *_ShowEscape(986,16181
+FILE *_skipnlspaces(507,7845
+FILE *_skipspaces(523,8086
+long ipow(159,2331
+long maxavail(625,9591
+long memavail(620,9508
+long my_labs(59,877
+int my_memcmp(106,1631
+int my_memcmp(108,1695
+Anyptr my_memcpy(92,1387
+Anyptr my_memcpy(94,1446
+Anyptr my_memmove(67,953
+Anyptr my_memmove(69,1013
+Anyptr my_memset(122,1933
+Anyptr my_memset(124,1983
+int my_tolower(147,2237
+int my_toupper(137,2145
+int strcicmp(283,4183
+void strdelete(398,6087
+void strinsert(420,6442
+char *strltrim(310,4569
+void strmove(379,5739
+char *strpad(355,5268
+int strpos2(257,3722
+char *strrpt(336,4947
+char *strrtrim(320,4700
+char *strsub(227,3136
+
+loc.p2clib.c,0
+
+makeproto.c,140
+#define bounce(143,3115
+#define isidchar(38,493
+int main(149,3230
+int readline(66,1060
+int strbeginsword(116,2289
+void usage(127,2434
+
+trans.h,1120
+#define ALLOC(1886,81845
+#define ALLOC(1905,82414
+#define ALLOC(1921,82918
+#define ALLOCV(1890,81983
+#define ALLOCV(1909,82562
+#define ALLOCV(1925,83044
+#define CHECKORDEXPR(1877,81553
+#define FCheck(1879,81629
+#define FREE(1897,82205
+#define FREE(1917,82856
+#define FREE(1933,83294
+#define MAX(1940,83421
+#define MIN(1939,83380
+# define PP(23,847
+# define PP(28,979
+# define PV(24,903
+# define PV(29,1042
+#define REALLOC(1894,82107
+#define REALLOC(1913,82696
+#define REALLOC(1929,83156
+# define __CAT__(26,947
+# define __CAT__(32,1102
+# define __ID__(31,1082
+#  define _tolower(1954,83674
+#  define _tolower(1961,83906
+#  define _toupper(1953,83637
+#  define _toupper(1960,83872
+#define checkeof(1880,81694
+#define delfreearg(1871,81252
+#define delsimpfreearg(1872,81323
+#define getcommentkind(1041,36423
+# define memcmp(78,1851
+# define memcpy(77,1815
+100,2367
+  int numparams = sizeof(1743,77374
+  Strlist *rcprevvalues[sizeof(1744,77435
+# define strcmp(88,2029
+#define swapexprs(1874,81400
+#define swapstmts(1875,81476
+# define tolower(1948,83548
+# define toupper(1947,83512
+
+p2c.h,1506
+#define AGETFBUF(398,10245
+#define APUTFBUF(406,10540
+#define BUFEOF(417,10942
+#define BUFFPOS(418,11001
+#define CPUT(415,10900
+#define CPUTFBUF(405,10493
+#define FILEBUF(385,9761
+#define FILEBUFNC(387,9852
+#define Free(435,11489
+#define FreeR(434,11415
+#define GET(409,10638
+#define GETFBUF(393,10043
+# define Malloc(429,11231
+# define Malloc(432,11320
+#  define PP(206,4130
+#  define PP(210,4204
+# define PP(223,4480
+#define PUT(413,10788
+#define PUTFBUF(404,10442
+#  define PV(207,4153
+#  define PV(211,4259
+# define PV(224,4503
+#define P_clrbits_B(456,12217
+#define P_clrbits_S(465,12702
+#define P_getbits_SB(445,11821
+#define P_getbits_SS(462,12457
+#define P_getbits_UB(441,11676
+#define P_getbits_US(461,12380
+#define P_max(467,12781
+#define P_min(468,12826
+#define P_putbits_SB(452,12081
+#define P_putbits_SS(464,12623
+#define P_putbits_UB(449,11974
+#define P_putbits_US(463,12562
+#define RESETBUF(390,9938
+#define SETUPBUF(391,9990
+#define SEXT(438,11561
+# define TRY(134,2496
+# define TRY(142,2852
+#define _CHKIO(362,9065
+#define _SETIO(364,9164
+#  define __CAT__(81,1526
+#  define __CAT__(84,1583
+# define __CAT__(87,1630
+#  define __ID__(83,1562
+#  define _tolower(513,13795
+#  define _tolower(520,14027
+#  define _toupper(512,13758
+#  define _toupper(519,13993
+# define memcmp(94,1738
+# define memcpy(93,1698
+# define strchr(95,1773
+# define strrchr(96,1805
+# define tmpfile(381,9686
+# define tolower(507,13669
+# define toupper(506,13633
