@@ -329,9 +329,10 @@ Checked 2026-08-25.
 
 ## Scripts
 
-| Script | Purpose |
-|---|---|
-| `scripts/check-c23-output.sh` | Verify generated C is valid strict ISO C23, links, and runs correctly. Run after `make test`. |
+Two are CI gates: `check-c23-output.sh` verifies that the C p2c emits is valid
+strict ISO C23 and runs correctly, and `verify-upstream.sh` verifies that each
+`upstream/*` tag still reproduces its release archive. The rest maintain the
+vendor branches or measure the code. See [`scripts/README.md`](scripts/README.md).
 
 ## License
 

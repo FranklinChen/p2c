@@ -56,3 +56,26 @@ jobs:
 
       - name: Lint shell scripts
         run: shellcheck scripts/*.sh
+
+  # The upstream and upstream-archives branches are the preservation half of
+  # this repository: every surviving p2c release, and the original archives
+  # they came from. Nothing else checks them, so a mangled or force-pushed
+  # vendor branch would otherwise be discovered years later, by someone who
+  # needed it. This rebuilds the release trees from the committed archives and
+  # confirms each upstream/* tag still reproduces one.
+  vendor-branches:
+    name: vendor branches
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify each upstream tag reproduces its archive
+        run: |
+          git fetch --tags origin \
+            '+refs/heads/upstream:refs/heads/upstream' \
+            '+refs/heads/upstream-archives:refs/heads/upstream-archives'
+          scripts/fetch-upstream-lineage.sh /tmp/lineage
+          git worktree add --detach /tmp/vendor-wt
+          scripts/verify-upstream.sh /tmp/vendor-wt /tmp/lineage

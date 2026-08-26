@@ -1,38 +1,53 @@
 #!/usr/bin/env bash
-# Compare consecutive pristine p2c releases to establish the real change history.
-# diff exits non-zero when files differ, so pipefail/errexit are deliberately not used.
+#
+# Show what actually changed between consecutive p2c releases.
+#
+# errexit and pipefail are deliberately not set: diff exits non-zero whenever
+# files differ, which here is the normal case rather than a failure.
+#
 # Usage: lineage-diff.sh <lineage-dir>
+#   Produce the lineage directory with fetch-upstream-lineage.sh.
 
-root="${1:?usage: lineage-diff.sh <lineage-dir>}"
-cd "$root" || exit 1
+set -u
 
-names=("1.21alpha2" "2.00" "2.01" "2.02")
-dirs=(
-  "x1.21alpha2"
-  "x2.00/p2c-2.00"
-  "x2.01/p2c-2.01"
-  "x2.02/p2c-2-ZIPPERDOT-02"
-)
+here=$(cd "$(dirname "$0")" && pwd)
+# shellcheck source=scripts/lineage-releases.sh
+. "$here/lineage-releases.sh"
 
-for ((i = 1; i < ${#dirs[@]}; i++)); do
-  prev="${dirs[i-1]}"
-  cur="${dirs[i]}"
-  echo "==== ${names[i-1]} -> ${names[i]}"
+lineage="${1:?usage: lineage-diff.sh <lineage-dir>}"
 
-  listing=$(diff -rq "$prev" "$cur" 2>/dev/null)
+prev_ver=""
+prev_dir=""
+for entry in "${LINEAGE_RELEASES[@]}"; do
+  IFS='|' read -r ver _ _ <<<"$entry"
+  dir=$(lineage_root "$lineage/x$ver")
 
-  removed=$(printf '%s\n' "$listing" | grep -c "^Only in $prev")
-  added=$(printf '%s\n' "$listing" | grep -c "^Only in $cur")
-  echo "     files removed: $removed   added: $added"
-  printf '%s\n' "$listing" | grep "^Only in $cur" | sed 's/^/     /' | head -6
+  if [ ! -d "$dir" ]; then
+    echo "missing: $lineage/x$ver; run fetch-upstream-lineage.sh" >&2
+    exit 1
+  fi
 
-  printf '%s\n' "$listing" | grep " differ$" | while read -r line; do
-    left=${line#Files }
-    left=${left%% and *}
-    right=${line#* and }
-    right=${right% differ}
-    rel=${left#"$prev"/}
-    n=$(diff "$left" "$right" 2>/dev/null | grep -c '^[<>]')
-    printf '   %5s  %s\n' "$n" "$rel"
-  done | sort -rn | head -10
+  if [ -n "$prev_ver" ]; then
+    echo "==== $prev_ver -> $ver"
+    listing=$(diff -rq "$prev_dir" "$dir" 2>/dev/null)
+
+    printf '     files removed: %s   added: %s\n' \
+      "$(printf '%s\n' "$listing" | grep -c "^Only in $prev_dir")" \
+      "$(printf '%s\n' "$listing" | grep -c "^Only in $dir")"
+    printf '%s\n' "$listing" | grep "^Only in $dir" | sed 's/^/     /' | head -6
+
+    # Files present on both sides, ranked by how much they changed. diff -rq
+    # reports only that they differ, so the line counts need a second look at
+    # each one.
+    printf '%s\n' "$listing" \
+      | sed -n "s|^Files $prev_dir/\(.*\) and .* differ\$|\1|p" \
+      | while read -r rel; do
+          printf '   %5s  %s\n' \
+            "$(diff "$prev_dir/$rel" "$dir/$rel" | grep -c '^[<>]')" "$rel"
+        done \
+      | sort -rn | head -10
+  fi
+
+  prev_ver="$ver"
+  prev_dir="$dir"
 done
