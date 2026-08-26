@@ -15,3 +15,4 @@ src/p2c
 src/p2c.man.inst
 src/p2cc
 src/parse.c.orig
+*.dSYM/

@@ -232,7 +232,12 @@ typedef char *Anyptr;
 #endif
 
 #define Register    register  /* Register variables */
-#define Char        char      /* Characters (not bytes) */
+
+/* Char is a type, unlike its neighbours here, which are storage-class keywords
+   and so have to stay macros.  Guarded so -DChar=... still overrides it. */
+#ifndef Char
+typedef char Char;            /* Characters (not bytes) */
+#endif
 
 #ifndef Static
 # define Static     static    /* Private global funcs and vars */
@@ -250,7 +255,14 @@ typedef unsigned char boolean;
 typedef Char alfa[10];
 #endif
 
-#ifndef true
+/*
+ * C23 makes true and false predefined constants rather than macros, so the
+ * historical "#ifndef true" guard no longer suppresses these: the identifiers
+ * are keywords, not macros, and defining them shadows the language keywords.
+ * The values are identical either way, so on C23 and later we simply leave
+ * the built-in constants alone.
+ */
+#if !defined(true) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
 # define true    1
 # define false   0
 #endif
@@ -353,6 +365,12 @@ extern long     P_packset   PP( (long *) );
 extern int      P_getcmdline PP( (int, int, Char *) );
 extern Void     TimeStamp   PP( (int *, int *, int *,
 				 int *, int *, int *) );
+
+/* Without these, translated VAX Pascal calls them with no declaration in
+   scope, which current compilers reject.  From upstream 2.02; see README.md
+   for what 2.01 shipped instead. */
+extern Void     VAXdate     PP( (Char *) );
+extern Void     VAXtime     PP( (Char *) );
 extern Void	P_sun_argv  PP( (char *, int, int) );
 extern FILE    *_skipspaces PP( (FILE *) );
 extern FILE    *_skipnlspaces PP( (FILE *) );
@@ -424,12 +442,20 @@ typedef struct {
     Char name[_FNSIZE];
 } _TEXT;
 
-/* Memory allocation */
+/* Memory allocation.
+
+   _OutMem() never returns: it calls _Escape(), which always either longjmps
+   or exits.  These macros used to cast its int result to a pointer, which is
+   a narrowing conversion on LP64 and warned at every allocation site of every
+   translated program.  Discarding the result with a comma operator removes
+   the conversion rather than widening it, so nothing here depends on
+   _OutMem's return type at all. */
 #ifdef __GCC__
-# define Malloc(n)  (malloc(n) ?: (Anyptr)_OutMem())
+# define Malloc(n)  (malloc(n) ?: (_OutMem(), (Anyptr)0))
 #else
 extern Anyptr __MallocTemp__;
-# define Malloc(n)  ((__MallocTemp__ = malloc(n)) ? __MallocTemp__ : (Anyptr)_OutMem())
+# define Malloc(n)  ((__MallocTemp__ = malloc(n)) ? __MallocTemp__ \
+                                       : (_OutMem(), (Anyptr)0))
 #endif
 #define FreeR(p)    (free((Anyptr)(p)))    /* used if arg is an rvalue */
 #define Free(p)     (free((Anyptr)(p)), (p)=NULL)

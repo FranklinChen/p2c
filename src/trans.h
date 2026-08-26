@@ -83,7 +83,6 @@ char *malloc(), *realloc();
 
 #include <ctype.h>
 
-
 #ifdef __GNUC__      /* Fast, in-line version of strcmp */
 # define strcmp(a,b) ({ char *_aa = (a), *_bb = (b); int _diff;  \
 			for (;;) {    \
@@ -512,7 +511,38 @@ typedef struct S_meaning {
     int refcount;	       /* Number of references to meaning in program */
     char *name;		       /* Print name (i.e., C name) of the meaning */
     char *othername;	       /* (above) */
-    struct S_expr *(*handler)();   /* Custom translator for procedure */
+    /* Custom translator for procedure.
+
+       CAUTION: this single field holds FIVE differently-shaped functions,
+       discriminated at run time by mp->kind and mp->isfunction, and cast at
+       each call site.  They differ in RETURN TYPE as well as parameters: the
+       two procedure forms return Stmt *, while this field is declared to
+       return Expr *, so decl.c casts them on the way in.
+
+       Worse, the handlers of a single kind do not even agree on ARITY.  The
+       call sites pass a fixed two arguments, and each handler declares only
+       the prefix it actually uses, which is legal only because "()" means
+       "unspecified" before C23.  Measured over 222 distinct handlers:
+
+           makespecialproc    54 take no args, 1 takes (Meaning *, Stmt *)
+           makestandardproc    1 takes no args, 29 take (Expr *)
+           makespecialfunc    49 take no args
+           makestandardfunc    3 take no args, 78 take (Expr *)
+           makespecialvar      5 take no args
+
+       So typing this properly is not five typedefs: it needs either an added
+       unused parameter on about 112 handlers, or per-arity constructors so
+       each registration states its own shape.  scripts/handler-census.sh
+       regenerates the table above; do not trust these numbers without it.
+       The two procedure call sites are in parse.c, in p_statement.
+
+       Do NOT "fix" this by giving it a prototype: an empty parameter list here
+       means "unspecified" only before C23, which is exactly why src/Makefile
+       must select -std=gnu17.  Under C23 "()" means "(void)" and the tree does
+       not build.  Repairing this properly means giving each handler shape its
+       own type; see "Modern compiler compatibility" in README.md, which has
+       the measured error count and the compilers it was measured on. */
+    struct S_expr *(*handler)();
     Strlist *comments;	       /* Comments associated with meaning */
 } Meaning;
 
@@ -1861,10 +1891,6 @@ extern Expr *new_array_size;
 
 
 
-/* Our library omits declarations for these functions! */
-
-int link           PP( (char *, char *) );
-int unlink         PP( (char *) );
 
 
 

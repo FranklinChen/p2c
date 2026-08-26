@@ -18,6 +18,14 @@ The "c" subdirectory contains pre-translated files you can compare
 with your p2c output.  (The "c" subdirectory is present in the ftp
 distribution only, not in the shar distribution.)
 
+Note: those files are Gillespie's originals, kept as shipped, and they no
+longer match what you get today.  p2crc in this directory sets MainType
+int, so current output has "int main(...)" where the reference files have
+a bare "main(...)", and it sets UseGets 0, so current output calls fgets
+where c/basic.c still calls the long-since-removed gets().  The reference
+files are historical samples; p2crc and the README at the top of this
+repository describe how output is produced now.
+
 To translate only:          make trans   or just   make
 To translate and compile:   make comp
 

@@ -3807,7 +3807,12 @@ int prec;
                 exprsame(ex->args[1]->args[0], ex->args[0], 2) &&
                 ex->args[1]->args[1]->kind == EK_CONST &&
                 ex->args[1]->args[1]->val.type->kind == TK_INTEGER &&
-                abs(ex->args[1]->args[1]->val.i) == 1) {
+                /* labs, not abs: val.i is a long, and abs() would truncate it
+                   to int.  On LP64 a constant such as 4294967297 truncates to
+                   1, so "x := x + 4294967297" would be emitted as "x++".  The
+                   surrounding test only requires TK_INTEGER, so nothing else
+                   bounds the value. */
+                labs(ex->args[1]->args[1]->val.i) == 1) {
 		if (prec == 0 && postincrement) {
 		    setprec(15);
 		    wrexpr(ex->args[0], subprec);

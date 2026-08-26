@@ -1,17 +1,58 @@
 name: Build and Test
+
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
 jobs:
-  build:
+  # Build p2c and run the translated example programs on each runner's default
+  # toolchain.
+  native:
+    name: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Build and test
-        run: make test
+      - uses: actions/checkout@v7
+
+      # "make check" is "make test" plus the strict-C23 gate, so a contributor
+      # running one command locally reproduces exactly what CI does.
+      - name: Build, test, and check generated output
+        run: make check
+
+  # Containers rather than runners: GCC 15 was the first release to default to
+  # C23, and neither ubuntu-latest nor macos-latest does, so both stayed green
+  # for months while p2c did not build on GCC 15 or 16 at all. Why the dialect
+  # matters is in the "handler" comment in src/trans.h.
+  #
+  # Both versions are pinned deliberately: 15 is the first C23-default release
+  # and is what distributions ship, 16 is the newest available. They run
+  # concurrently, so the second job costs billed minutes, not wall clock.
+  modern-gcc:
+    name: gcc ${{ matrix.gcc }}
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc: ['15', '16']
+    runs-on: ubuntu-latest
+    container: gcc:${{ matrix.gcc }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build, test, and check generated output
+        run: make check CC=gcc
+
+  # A shell script that is only "shellcheck-clean when someone remembers" is
+  # not gated. Default severity: style and info findings count too.
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Lint shell scripts
+        run: shellcheck scripts/*.sh

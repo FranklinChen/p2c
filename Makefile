@@ -47,3 +47,24 @@ test:
 install:
 	cd src; make install
 
+
+# Where "make install" puts the runtime. Must match HOMEDIR and LIBDIR in
+# src/Makefile; change both together if you switch to the public install
+# layout described there.
+P2CHOME = home
+
+# "make test" builds generated code in the compiler's default dialect, which
+# still tolerates K&R definitions. This additionally checks that the generated
+# C is valid strict ISO C23. Kept as its own target so it can be re-run during
+# iteration without repeating the full build, and so a failing "test" does not
+# hide the C23 status.
+c23-check:
+	./scripts/check-c23-output.sh $(CC) $(P2CHOME)
+
+# Everything CI runs, in one command, so a local run predicts CI rather than
+# approximating it. Note "test" is the historical entry point here and "check"
+# is the superset, which is the reverse of the usual GNU convention.
+check: test c23-check
+
+.PHONY: test install check c23-check
+

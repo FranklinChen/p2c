@@ -26,4 +26,13 @@ FuncMacro	asm_ior(a,b) = (a | b)
 FuncMacro	ixor(a,b) = (a ^ b)
 FuncMacro	inot(a) = (~a)
 
+# Give main() an explicit return type.  Without this p2c emits a bare
+# "main(argc, argv)", and implicit int has been invalid C since C99, so the
+# translated examples fail to compile on any current compiler.
+MainType	int
 
+# Read strings with fgets and a length check rather than gets(). gets() was
+# removed from the C standard in C11 and glibc no longer declares it, so the
+# default makes basic.c fail to compile on Linux. It is also the classic
+# buffer-overflow function, so this is the better behaviour regardless.
+UseGets	0

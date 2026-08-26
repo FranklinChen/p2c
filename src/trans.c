@@ -20,6 +20,14 @@ the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 
 #define define_globals
 #define PROTO_TRANS_C
+
+/* sbrk(), link() and unlink() are called below and declared nowhere else.
+   glibc puts them here; on macOS they arrive via another header, which is why
+   this file built there and not on Linux, where an implicit declaration has
+   been an error since GCC 14.  Included before trans.h, whose __GNUC__ strcmp
+   macro must not be in scope while a system header is parsed. */
+#include <unistd.h>
+
 #include "trans.h"
 
 #include <time.h>
@@ -779,7 +787,10 @@ char **argv;
 #endif
 		ch = (char)0xffff;
 		signedchars = (ch < 0);
-		bft.f1 = 0xffff;
+		/* -1 is the same bit pattern as the 0xffff this used to
+		   assign, but in range for a 2-bit field rather than
+		   relying on truncation. */
+		bft.f1 = -1;
 		signedfield = (bft.f1 < 0);
 		i = -1;
 		i >>= 1;
@@ -1571,16 +1582,21 @@ void mem_summary()
     printf("Summary of memory allocated but not freed:\n");
     printf("Total bytes = %d of %d\n", final_bytes, total_bytes);
     printf("Expressions = %d of %d\n", final_exprs, total_exprs);
+    /* The counters are int, but "int / sizeof(...)" promotes to size_t, and
+       passing a size_t to "%d" is undefined; it printed garbage on LP64.
+       The quotients are small, so narrowing back to int is safe here. */
     printf("Meanings =    %d of %d (%d of %d)\n",
 	   final_meanings, total_meanings,
-	   final_meanings / sizeof(Meaning),
-	   total_meanings / sizeof(Meaning));
+	   (int)(final_meanings / sizeof(Meaning)),
+	   (int)(total_meanings / sizeof(Meaning)));
     printf("Strings =     %d of %d\n", final_strings, total_strings);
     printf("Symbols =     %d of %d\n", final_symbols, total_symbols);
     printf("Types =       %d of %d (%d of %d)\n", final_types, total_types,
-	   final_types / sizeof(Type), total_types / sizeof(Type));
+	   (int)(final_types / sizeof(Type)),
+	   (int)(total_types / sizeof(Type)));
     printf("Statements =  %d of %d (%d of %d)\n", final_stmts, total_stmts,
-	   final_stmts / sizeof(Stmt), total_stmts / sizeof(Stmt));
+	   (int)(final_stmts / sizeof(Stmt)),
+	   (int)(total_stmts / sizeof(Stmt)));
     printf("Strlists =    %d of %d\n", final_strlists, total_strlists);
     printf("Literals =    %d of %d\n", final_literals, total_literals);
     printf("Ctxstacks =   %d of %d\n", final_ctxstacks, total_ctxstacks);

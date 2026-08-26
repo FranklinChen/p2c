@@ -225,7 +225,12 @@ UsePPMacros                     # 1=use PP and PV macros for prototypes
 
 MainType			# Type name to put in front of "main";
 				# generally either "int" or "void".  Blank
-				# works on most systems.
+				# emits a bare "main(argc, argv)", which has
+				# been invalid C since C99 and is rejected by
+				# default by GCC 14+ and Clang 16+.  Set this
+				# to "int" for any current compiler.  The
+				# default is left blank only so that existing
+				# downstreams see no change in output.
 
 ReplaceAfter                    # Textual replacements on output text lines;
 ReplaceAfter                    # see ReplaceBefore for details.
@@ -1044,6 +1049,13 @@ WhileFgets                      # 1 or default=while (fgets(...)) { ... }
 
 UseGets                         # 1 or default=use gets to read string[255]
                                 # 0=always use fgets (with length checking)
+                                # NOTE: gets() was removed from C in C11 and
+                                # glibc no longer declares it, so the default
+                                # emits code that will not compile on current
+                                # Linux toolchains.  Set this to 0 unless you
+                                # are targeting a pre-C11 system.  The default
+                                # is unchanged only to avoid altering output
+                                # for existing downstreams.
 
 FloatScanfCode                  # Name of scanf control string for floats.
                                 # Default is "%g".

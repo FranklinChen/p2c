@@ -40,9 +40,29 @@ MANFILE = p2c.cat          # human-readable manual (for cat.1)
 CC = cc                    # you may wish to use gcc here instead
 OPT = # -O		   # uncomment this for optimization
 DEB = # -g		   # uncomment this for debugging
-DEFS =	-DTEST_MALLOC -Wno-implicit-function-declaration -Wno-implicit-int
+
+# These sources are C17-era and break under C23. See the "handler" comment in
+# trans.h for the mechanism, and "Modern compiler compatibility" in README.md.
+# Needs GCC 8+ or Clang 6+; remove it if building with something older.
+STD = -std=gnu17
+
+DEFS =	-DTEST_MALLOC
 CFLAGS = $(OPT) $(DEB) $(DEFS)
 LFLAGS =
+
+# $(STD) is deliberately NOT folded into CFLAGS. Distribution builds routinely
+# override CFLAGS on the command line, e.g. "make CFLAGS='-O2 -g'", which would
+# silently drop the dialect selection and fail to build on GCC 15 and later.
+# The dialect is a correctness precondition, not a preference.
+#
+# Every compile goes through $(COMPILE) so that a rule which omits the dialect
+# is a visible deviation rather than an easy oversight. CPPFLAGS is honoured
+# because distribution builds inject hardening flags through it.
+COMPILE = $(CC) -c $(STD) $(CPPFLAGS) $(CFLAGS)
+COMPILE_LINK = $(CC) $(STD) $(CPPFLAGS) $(CFLAGS) $(LFLAGS)
+
+.c.o:
+	$(COMPILE) -o $@ $<
 
 
 # Custom translator modules
@@ -64,6 +84,11 @@ LIBSRCS = p2clib.c loc.p2clib.c
 LIBOBJS = p2clib.o loc.p2clib.o
 OTHERLIBOBJS =
 
+# Header dependencies. Without these, editing a header leaves stale objects
+# in an incremental build; only dir.o and trans.o declared any before.
+$(OBJS): trans.h p2c.hdrs p2c.proto
+$(LIBOBJS): p2c.h
+
 ABSHOMEDIR = `cd $(HOMEDIR); pwd`
 ABSINCDIR = `cd $(INCDIR); pwd`
 ABSLIBDIR = `cd $(LIBDIR); pwd`
@@ -82,11 +107,11 @@ proto: $(PROTOS)
 p2c: $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o p2c
 
-dir.o: dir.c trans.h
-	$(CC) -c $(CFLAGS) $(CUSTDEFS) dir.c
+dir.o: dir.c
+	$(COMPILE) $(CUSTDEFS) dir.c
 
-trans.o: trans.c trans.h
-	$(CC) -c $(CFLAGS) -DHASDUMPS -DP2C_HOME=\"$(ABSHOMEDIR)\" trans.c
+trans.o: trans.c
+	$(COMPILE) -DHASDUMPS -DP2C_HOME=\"$(ABSHOMEDIR)\" trans.c
 
 
 # Making and using makeproto
@@ -97,15 +122,14 @@ p2c.proto: $(SRCS) makeproto
 	./makeproto -n -m -h -t16 -a35 -s1 -i $(SRCS) -o p2c.proto
 
 makeproto: makeproto.c
-	$(CC) $(CFLAGS) $(LFLAGS) makeproto.c -o makeproto
+	$(COMPILE_LINK) makeproto.c -o makeproto
 
 
 # Making the p2c runtime library
 libp2c.a: $(LIBOBJS)
 	ar r libp2c.a $(LIBOBJS) $(OTHERLIBOBJS)
 
-p2clib.o: p2clib.c
-	$(CC) -c $(CFLAGS) p2clib.c
+p2clib.o: p2clib.c p2c.h
 
 
 # Making the p2c man page
@@ -210,8 +234,17 @@ tags:
 clean.o:
 	rm -f $(OBJS)
 
+# makeproto and p2cc were missing here, so "make clean" left stale binaries
+# behind. That matters: makeproto generates the checked-in p2c.proto and
+# p2c.hdrs, so a stale one silently keeps producing output from older sources.
+#
+# $(PROTOS) is removed even though those two files are checked in, because
+# makeproto regenerates them byte-for-byte. p2c.cat is checked in too but is
+# NOT removed, because regenerating it needs nroff, which the build treats as
+# optional. The rule is "remove what we can reproduce", not "remove what is
+# untracked".
 clean:
-	rm -f $(OBJS) $(LIBOBJS) $(PROTOS) p2c libp2c.a
+	rm -f $(OBJS) $(LIBOBJS) $(PROTOS) p2c p2cc makeproto libp2c.a
 
 wc:
 	wc $(SRCS) $(LIBSRCS) trans.h

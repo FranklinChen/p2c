@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <time.h>
 
 #ifdef M_XENIX
 # define BSD 0
@@ -158,7 +157,6 @@ char **argv;
     char argdecls[MAXARGS][256], argnames[MAXARGS][80];
     char *cp, *cp2, *cp3;
     int i, j, pos, len, thistab, numstars, whichf, nargs, incomment, errors = 0;
-    long li;
     int typetab = 15, argtab = 30, width = 80, usenames = 0, usemacros = 0;
     int useextern = 0, staticness = -1, hasheader = 0, useifdefs = 0;
     int stupid = 1, firstdecl;
@@ -213,10 +211,9 @@ char **argv;
     } else
         outf = stdout;
     if (hasheader) {
-        time(&li);
-        cp = ctime(&li);
-        cp[24] = 0;
-        fprintf(outf, "\n/* Declarations created by \"makeproto\" on %s */\n", cp);
+        /* Deliberately undated: p2c.proto and p2c.hdrs are checked in, so a
+           timestamp made every build rewrite them with identical content. */
+        fprintf(outf, "\n/* Declarations created by \"makeproto\". */\n");
         fprintf(outf, "\n\n");
     }
     incomment = 0;

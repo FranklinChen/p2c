@@ -7,7 +7,6 @@
 P2C = ../p2c
 INC = ../home
 LIB = ../home/libp2c.a
-CFLAGS = -Wno-implicit-function-declaration -Wno-implicit-int
 
 
 default: comp
@@ -17,41 +16,46 @@ default: comp
 
 trans:  fact.c  e.c  self.c  cref.c  basic.c
 
-fact.c: fact.p
-	$(P2C) fact.p
+# One portable suffix rule instead of five copies. p2crc and the translator
+# itself are inputs to every translation, so both are prerequisites: without
+# them, editing p2crc or rebuilding p2c leaves stale .c files behind.
+.SUFFIXES: .p .c
 
-e.c: e.p
-	$(P2C) e.p
+.p.c:
+	$(P2C) $<
 
-self.c: self.p
-	$(P2C) self.p
-
-cref.c: cref.p
-	$(P2C) cref.p
-
-basic.c: basic.p
-	$(P2C) basic.p
+fact.c e.c self.c cref.c basic.c: p2crc $(P2C)
 
 
 
 # Compiling everything:
 
+# These rules compile p2c's *generated* output, which by default is K&R C, so
+# they must name a dialect that still accepts it rather than trusting a
+# compiler default that is drifting. Same reasoning as src/Makefile; the full
+# story is in "Modern compiler compatibility" in README.md. Kept out of CFLAGS
+# so an override cannot drop it.
+STD = -std=gnu17
+
+# CFLAGS is deliberately not assigned here, so that an inherited environment
+# CFLAGS reaches these rules too. Do not put -Wno-* flags in it; fix the cause.
+
 comp:  fact  e  self  cref  basic
 
 fact: fact.c
-	$(CC) $(CFLAGS) -I$(INC) fact.c $(LIB) -o fact
+	$(CC) $(STD) $(CFLAGS) -I$(INC) fact.c $(LIB) -o fact
 
 e: e.c
-	$(CC) $(CFLAGS) -I$(INC) e.c $(LIB) -o e
+	$(CC) $(STD) $(CFLAGS) -I$(INC) e.c $(LIB) -o e
 
 self: self.c
-	$(CC) $(CFLAGS) -I$(INC) self.c $(LIB) -o self
+	$(CC) $(STD) $(CFLAGS) -I$(INC) self.c $(LIB) -o self
 
 cref: cref.c
-	$(CC) $(CFLAGS) -I$(INC) cref.c $(LIB) -o cref
+	$(CC) $(STD) $(CFLAGS) -I$(INC) cref.c $(LIB) -o cref
 
 basic: basic.c
-	$(CC) $(CFLAGS) -I$(INC) basic.c $(LIB) -lm -o basic
+	$(CC) $(STD) $(CFLAGS) -I$(INC) basic.c $(LIB) -lm -o basic
 
 
 
