@@ -256,15 +256,26 @@ typedef Char alfa[10];
 #endif
 
 /*
- * C23 makes true and false predefined constants rather than macros, so the
- * historical "#ifndef true" guard no longer suppresses these: the identifiers
- * are keywords, not macros, and defining them shadows the language keywords.
- * The values are identical either way, so on C23 and later we simply leave
- * the built-in constants alone.
+ * C23 makes true and false keywords rather than macros, so the historical
+ * "#ifndef true" guard no longer suppresses these definitions, and clang
+ * rejects defining a keyword under -pedantic-errors.  C++ has had them as
+ * keywords all along.  Otherwise, three cases by __STDC_VERSION__:
+ *
+ *   at most C17 (201710L), or absent:  define them, as p2c always has.
+ *   C23 proper (202311L or later):     they are keywords; define nothing.
+ *   anything in between:               a compiler implementing a draft of
+ *       C23 under -std=c2x.  These all report the same interim value, 202000L,
+ *       yet disagree about the keywords: clang 15 and 16 and GCC 13 have them,
+ *       GCC 12 and clang 14 do not.  No version test can tell them apart, but
+ *       each compiler's own <stdbool.h> knows which it is, so defer to it.
  */
-#if !defined(true) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
+#if defined(true) || defined(__cplusplus)
+  /* Already provided: by the user, an earlier header, or the language. */
+#elif !defined(__STDC_VERSION__) || __STDC_VERSION__ <= 201710L
 # define true    1
 # define false   0
+#elif __STDC_VERSION__ < 202311L
+# include <stdbool.h>
 #endif
 
 #ifndef TRUE
@@ -367,8 +378,8 @@ extern Void     TimeStamp   PP( (int *, int *, int *,
 				 int *, int *, int *) );
 
 /* Without these, translated VAX Pascal calls them with no declaration in
-   scope, which current compilers reject.  From upstream 2.02; see README.md
-   for what 2.01 shipped instead. */
+   scope, which current compilers reject.  From upstream 2.02; 2.01 instead
+   wrote them as bare K&R definition headers, which do not compile. */
 extern Void     VAXdate     PP( (Char *) );
 extern Void     VAXtime     PP( (Char *) );
 extern Void	P_sun_argv  PP( (char *, int, int) );

@@ -7,8 +7,8 @@ enforces. `lineage-releases.sh` is sourced by the others rather than run.
 
 | Script | Checks |
 |---|---|
-| `check-c23-output.sh` | That p2c's *generated* C is valid strict ISO C23, links, and runs correctly, over every example. Run it as `make c23-check`, or as part of `make check`. |
-| `verify-upstream.sh` | That each `upstream/*` tag still reproduces its release archive, file for file. |
+| `check-c23-output.sh` | That p2c's *generated* C is valid strict ISO C23 and links, for every example, and that the three batch examples (fact, e, self) run correctly; cref and basic read stdin, so they are built but not run. Run it as `make c23-check`, or as part of `make check`. |
+| `verify-upstream.sh` | That each `upstream/*` tag still reproduces its release archive, file for file, and that the `upstream` branch contains every release and ends at the last. |
 
 Both fail rather than skip when their inputs are missing.
 
@@ -24,7 +24,7 @@ why.
 | `fetch-upstream-lineage.sh` | Materialise every release into a working directory, verified against `SHA256SUMS`. Reads from the archive branch by default, so no network. `--from-net` downloads instead, which is for adding a genuinely new release. |
 | `lineage-diff.sh` | What actually changed between consecutive releases. |
 | `build-upstream-branch.sh` | Rebuild the whole vendor line under a scratch prefix and compare it tree-by-tree against the published tags. |
-| `lineage-releases.sh` | The release list, the upstream addresses, and the rule for locating a release inside its archive. Sourced by the three above. |
+| `lineage-releases.sh` | The release list, the upstream addresses, and the rule for locating a release inside its archive. Sourced by the three above and by `verify-upstream.sh`. |
 
 ```bash
 scripts/fetch-upstream-lineage.sh /tmp/lineage
@@ -53,8 +53,8 @@ trees is both runnable and a stronger claim.
 
 | Script | Purpose |
 |---|---|
-| `handler-census.sh` | Count the handlers registered with p2c's five `make*` constructors and report each one's declared arity. |
+| `handler-census.sh` | Count the handlers registered with p2c's five `make*` constructors and report each one's declared arity. Run as `scripts/handler-census.sh src`. |
 
 The `handler` field in `src/trans.h` holds five differently-shaped function
 pointers the compiler has never checked. Hand-written counts in that comment
-were twice wrong, so regenerate rather than trust them.
+were wrong more than once, so regenerate rather than trust them.

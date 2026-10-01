@@ -3,11 +3,10 @@
 # Verify that p2c's generated C is valid strict ISO C23, and that the programs
 # built from it produce correct results.
 #
-# This is deliberately stricter than "make test". That builds generated code in
-# the compiler's default dialect. GCC 16 defaults to gnu23, which still accepts
-# K&R function definitions as an extension, and Apple clang 21 still defaults to
-# C17. Strict -std=c23 accepts neither, so this exercises the combination that a
-# downstream on a current toolchain actually needs:
+# This is deliberately stricter than "make test", which compiles p2c's default
+# K&R-style output as gnu17, a dialect that still accepts it. Strict -std=c23
+# does not, so this exercises the combination that a downstream on a current
+# toolchain actually needs:
 #
 #   p2c -a          emit prototypes instead of K&R parameter lists
 #   MainType int    emit a return type on main(), since implicit int has been
@@ -135,8 +134,13 @@ for stem in $examples; do
   checked=$((checked + 1))
   cp "$root/examples/$stem.p" "$work/"
 
-  # p2c reads p2crc from its working directory.
-  ( cd "$work" && "$p2c_bin" -a "$stem.p" >/dev/null 2>&1 )
+  # p2c reads p2crc from its working directory. Its own failure is tested
+  # explicitly: under errexit a bare failing call ended the whole script with
+  # no FAIL line, no summary, and p2c's messages thrown away.
+  if ! ( cd "$work" && "$p2c_bin" -a "$stem.p" ) >"$work/$stem.p2c.log" 2>&1; then
+    fail "$stem" "p2c failed to translate it" "$work/$stem.p2c.log"
+    continue
+  fi
 
   if [ ! -f "$work/$stem.c" ]; then
     fail "$stem" "p2c produced no output"

@@ -32,9 +32,8 @@ fact.c e.c self.c cref.c basic.c: p2crc $(P2C)
 
 # These rules compile p2c's *generated* output, which by default is K&R C, so
 # they must name a dialect that still accepts it rather than trusting a
-# compiler default that is drifting. Same reasoning as src/Makefile; the full
-# story is in "Modern compiler compatibility" in README.md. Kept out of CFLAGS
-# so an override cannot drop it.
+# compiler default that is drifting. Same reasoning as src/Makefile, which
+# explains it. Kept out of CFLAGS so an override cannot drop it.
 STD = -std=gnu17
 
 # CFLAGS is deliberately not assigned here, so that an inherited environment

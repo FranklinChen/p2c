@@ -5,6 +5,14 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # A manual re-run, for checking the repository against a newer runner image
+  # without a commit. There is deliberately no schedule: the project is
+  # unmaintained, and scheduled failures would go to nobody.
+  workflow_dispatch:
+
+# Nothing here writes to the repository.
+permissions:
+  contents: read
 
 jobs:
   # Build p2c and run the translated example programs on each runner's default
@@ -16,6 +24,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 
@@ -24,14 +33,19 @@ jobs:
       - name: Build, test, and check generated output
         run: make check
 
-  # Containers rather than runners: GCC 15 was the first release to default to
-  # C23, and neither ubuntu-latest nor macos-latest does, so both stayed green
-  # for months while p2c did not build on GCC 15 or 16 at all. Why the dialect
-  # matters is in the "handler" comment in src/trans.h.
-  #
-  # Both versions are pinned deliberately: 15 is the first C23-default release
-  # and is what distributions ship, 16 is the newest available. They run
-  # concurrently, so the second job costs billed minutes, not wall clock.
+      # Generated prototypes and the formatted manual are checked in; a build
+      # must regenerate them identically or not touch them at all.
+      - name: The build leaves tracked files untouched
+        run: |
+          # Captured first, so that git failing fails the step rather than
+          # producing empty output that would pass the test.
+          s=$(git status --porcelain)
+          test -z "$s" || { printf '%s\n' "$s"; exit 1; }
+
+  # GCC 15 was the first release to default to C23, under which p2c's own
+  # sources do not compile without -std=gnu17; see the "handler" comment in
+  # src/trans.h. Containers pin the compiler, where a runner's default compiler
+  # changes whenever GitHub updates the image.
   modern-gcc:
     name: gcc ${{ matrix.gcc }}
     strategy:
@@ -40,17 +54,49 @@ jobs:
         gcc: ['15', '16']
     runs-on: ubuntu-latest
     container: gcc:${{ matrix.gcc }}
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 
       - name: Build, test, and check generated output
         run: make check CC=gcc
 
+      # actions/checkout marks the workspace safe only in a temporary config,
+      # so git in a container can refuse it as "dubious ownership" afterwards.
+      - name: The build leaves tracked files untouched
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          s=$(git status --porcelain)
+          test -z "$s" || { printf '%s\n' "$s"; exit 1; }
+
+  # Compilers that implemented C23 before it was published know it only as
+  # -std=c2x, and all report the same interim __STDC_VERSION__, 202000L, while
+  # disagreeing about whether true and false are keywords yet. p2c.h has to be
+  # right for both camps; see the comment above its true/false definitions.
+  # clang 16 has the keywords and rejects a redefinition under -pedantic-errors;
+  # GCC 12 lacks them and needs a definition. Pinned to ubuntu-24.04, which
+  # ships GCC 12 and 13 and clang 16.
+  draft-c23:
+    name: draft C23 (gcc 12, gcc 13, clang 16)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build, test, and check generated output with gcc 13
+        run: make check CC=gcc-13
+
+      - name: Check generated output with gcc 12 and clang 16
+        run: |
+          scripts/check-c23-output.sh gcc-12 home
+          scripts/check-c23-output.sh clang-16 home
+
   # A shell script that is only "shellcheck-clean when someone remembers" is
   # not gated. Default severity: style and info findings count too.
   shellcheck:
     name: shellcheck
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
 
@@ -59,19 +105,19 @@ jobs:
 
   # The upstream and upstream-archives branches are the preservation half of
   # this repository: every surviving p2c release, and the original archives
-  # they came from. Nothing else checks them, so a mangled or force-pushed
-  # vendor branch would otherwise be discovered years later, by someone who
-  # needed it. This rebuilds the release trees from the committed archives and
-  # confirms each upstream/* tag still reproduces one.
+  # they came from. This rebuilds each release tree from the committed
+  # archives, confirms every upstream/* tag reproduces one, and confirms the
+  # upstream branch still contains every release and ends at the last.
   vendor-branches:
     name: vendor branches
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: Verify each upstream tag reproduces its archive
+      - name: Verify the vendor branches against their archives
         run: |
           git fetch --tags origin \
             '+refs/heads/upstream:refs/heads/upstream' \

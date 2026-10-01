@@ -25,10 +25,10 @@
 
 test:
 	@echo "Compiling p2c, installing in `pwd`/home..."
-	cd src; make install
+	(cd src && $(MAKE) install)
 	@echo ""
 	@echo "Translating and compiling example files..."
-	cd examples; make comp
+	(cd examples && $(MAKE) comp)
 	@echo ""
 	@echo "Running the factorial example..."
 	examples/fact
@@ -45,7 +45,7 @@ test:
 
 
 install:
-	cd src; make install
+	(cd src && $(MAKE) install)
 
 
 # Where "make install" puts the runtime. Must match HOMEDIR and LIBDIR in
@@ -53,9 +53,9 @@ install:
 # layout described there.
 P2CHOME = home
 
-# "make test" builds generated code in the compiler's default dialect, which
-# still tolerates K&R definitions. This additionally checks that the generated
-# C is valid strict ISO C23. Kept as its own target so it can be re-run during
+# "make test" compiles p2c's default, K&R-style output as gnu17, a dialect that
+# still accepts it. This additionally checks that p2c's ANSI output (-a) is
+# valid strict ISO C23. Kept as its own target so it can be re-run during
 # iteration without repeating the full build, and so a failing "test" does not
 # hide the C23 status.
 c23-check:
@@ -64,7 +64,12 @@ c23-check:
 # Everything CI runs, in one command, so a local run predicts CI rather than
 # approximating it. Note "test" is the historical entry point here and "check"
 # is the superset, which is the reverse of the usual GNU convention.
-check: test c23-check
+#
+# The two steps run in sequence, not as prerequisites: under "make -j" the gate
+# would otherwise start before "test" had built the p2c it checks.
+check:
+	$(MAKE) test
+	$(MAKE) c23-check
 
 .PHONY: test install check c23-check
 

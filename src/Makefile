@@ -24,7 +24,7 @@ INCDIR = ../home/p2c
 BINDIR = ..
 LIBDIR = ../home
 MANDIR = ../home
-MANFILE = p2c.cat          # human-readable manual (for cat.1)
+MANFILE = p2c.cat.inst     # human-readable manual (for cat.1), built below
 #MANFILE = p2c.man.inst    # uncompressed nroff source (for man.1)
 #MANFILE = p2c.man.Z       # compressed nroff source (for man.1.Z)
 
@@ -56,10 +56,11 @@ LFLAGS =
 # The dialect is a correctness precondition, not a preference.
 #
 # Every compile goes through $(COMPILE) so that a rule which omits the dialect
-# is a visible deviation rather than an easy oversight. CPPFLAGS is honoured
-# because distribution builds inject hardening flags through it.
+# is a visible deviation rather than an easy oversight. CPPFLAGS and LDFLAGS
+# are honoured because distribution builds inject hardening flags through them,
+# and LINK passes CFLAGS too so that flags like -fsanitize reach the link.
 COMPILE = $(CC) -c $(STD) $(CPPFLAGS) $(CFLAGS)
-COMPILE_LINK = $(CC) $(STD) $(CPPFLAGS) $(CFLAGS) $(LFLAGS)
+LINK = $(CC) $(CFLAGS) $(LFLAGS) $(LDFLAGS)
 
 .c.o:
 	$(COMPILE) -o $@ $<
@@ -89,9 +90,12 @@ OTHERLIBOBJS =
 $(OBJS): trans.h p2c.hdrs p2c.proto
 $(LIBOBJS): p2c.h
 
-ABSHOMEDIR = `cd $(HOMEDIR); pwd`
-ABSINCDIR = `cd $(INCDIR); pwd`
-ABSLIBDIR = `cd $(LIBDIR); pwd`
+# Absolute install paths, compiled into p2c. Each creates its directory first:
+# "cd DIR; pwd" on a missing DIR prints the current directory, which silently
+# made src/ p2c's home in a fresh tree.
+ABSHOMEDIR = `mkdir -p $(HOMEDIR) && cd $(HOMEDIR) && pwd`
+ABSINCDIR = `mkdir -p $(INCDIR) && cd $(INCDIR) && pwd`
+ABSLIBDIR = `mkdir -p $(LIBDIR) && cd $(LIBDIR) && pwd`
 
 MISCSRCS = makeproto.c
 PROTOS = p2c.proto p2c.hdrs
@@ -99,13 +103,13 @@ HDRS = trans.h p2c.h
 
 
 # Top-level targets
-all: proto p2c libp2c.a p2c.cat
+all: proto p2c libp2c.a p2c.cat.inst
 proto: $(PROTOS)
 
 
 # Making p2c
 p2c: $(OBJS)
-	$(CC) $(LFLAGS) $(OBJS) -o p2c
+	$(LINK) $(OBJS) -o p2c
 
 dir.o: dir.c
 	$(COMPILE) $(CUSTDEFS) dir.c
@@ -121,8 +125,8 @@ p2c.hdrs: $(SRCS) makeproto
 p2c.proto: $(SRCS) makeproto
 	./makeproto -n -m -h -t16 -a35 -s1 -i $(SRCS) -o p2c.proto
 
-makeproto: makeproto.c
-	$(COMPILE_LINK) makeproto.c -o makeproto
+makeproto: makeproto.o
+	$(LINK) makeproto.o -o makeproto
 
 
 # Making the p2c runtime library
@@ -142,9 +146,14 @@ p2c.man.inst: p2c.man
 p2c.man.Z: p2c.man.inst
 	compress -c p2c.man.inst >p2c.man.Z
 
-p2c.cat: p2c.man.inst
+# p2c.cat is the formatted manual as shipped upstream, checked in for systems
+# without nroff. The build writes p2c.cat.inst instead of overwriting it, so a
+# build never modifies a tracked file: formatting with nroff where available,
+# otherwise falling back to the shipped copy.
+p2c.cat.inst: p2c.man.inst
 	if [ -f /usr/bin/nroff -o -f /bin/nroff ];  \
-	    then nroff -man p2c.man.inst >p2c.cat; fi
+	    then nroff -man p2c.man.inst >p2c.cat.inst; \
+	    else cp p2c.cat p2c.cat.inst; fi
 
 
 # The p2cc script.
@@ -169,8 +178,13 @@ COPY = cp
 newhome:
 	rm -f trans.o     # force trans.c to be recompiled (if HOMEDIR changes)
 
-install: proto \
-	makedirs \
+# Phased, because under "make -j" the copies below raced makedirs and failed
+# with "No such file or directory". Each phase may itself run in parallel.
+install:
+	$(MAKE) makedirs
+	$(MAKE) install-files
+
+install-files: \
 	$(BINDIR)/p2c         \
 	$(BINDIR)/p2cc        \
 	$(LIBDIR)/libp2c.a    \
@@ -184,12 +198,14 @@ install: proto \
 	$(HOMEDIR)/string.pas
 
 SHELL=/bin/sh
+
+# Phony because this directory holds a file named INSTALL, which on a
+# case-insensitive filesystem (macOS) would otherwise satisfy "install" and
+# make it silently do nothing.
+.PHONY: install install-files makedirs proto all clean
+
 makedirs:
-	if [ ! -d $(HOMEDIR) ]; then mkdir $(HOMEDIR); else true; fi
-	if [ ! -d $(BINDIR) ]; then mkdir $(BINDIR); else true; fi
-	if [ ! -d $(LIBDIR) ]; then mkdir $(LIBDIR); else true; fi
-	if [ ! -d $(MANDIR) ]; then mkdir $(MANDIR); else true; fi
-	if [ ! -d $(INCDIR) ]; then mkdir $(INCDIR); else true; fi
+	mkdir -p $(HOMEDIR) $(BINDIR) $(LIBDIR) $(MANDIR) $(INCDIR)
 
 $(BINDIR)/p2c: p2c
 	$(COPY)  p2c          $(BINDIR)/p2c
@@ -241,10 +257,11 @@ clean.o:
 # $(PROTOS) is removed even though those two files are checked in, because
 # makeproto regenerates them byte-for-byte. p2c.cat is checked in too but is
 # NOT removed, because regenerating it needs nroff, which the build treats as
-# optional. The rule is "remove what we can reproduce", not "remove what is
-# untracked".
+# optional; the build never writes it, only p2c.cat.inst. The rule is "remove
+# what we can reproduce", not "remove what is untracked".
 clean:
-	rm -f $(OBJS) $(LIBOBJS) $(PROTOS) p2c p2cc makeproto libp2c.a
+	rm -f $(OBJS) $(LIBOBJS) $(PROTOS) p2c p2cc makeproto makeproto.o libp2c.a \
+	      p2c.man.inst p2c.cat.inst
 
 wc:
 	wc $(SRCS) $(LIBSRCS) trans.h

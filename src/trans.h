@@ -138,7 +138,7 @@ char *p2c_home = P2C_HOME;
 extern char *p2c_home;
 #endif
 
-#define P2C_VERSION  "2.00.Oct.15"
+#define P2C_VERSION  "2.02.1"
 
 
 
@@ -519,29 +519,31 @@ typedef struct S_meaning {
        two procedure forms return Stmt *, while this field is declared to
        return Expr *, so decl.c casts them on the way in.
 
-       Worse, the handlers of a single kind do not even agree on ARITY.  The
-       call sites pass a fixed two arguments, and each handler declares only
-       the prefix it actually uses, which is legal only because "()" means
-       "unspecified" before C23.  Measured over 222 distinct handlers:
+       Worse, the handlers of a single kind do not even agree on ARITY.  Each
+       call site passes a fixed set of arguments: two for procedures, in
+       p_stmt in parse.c ((ep, slist) or (mp, slist)), and one for functions
+       and variables, in pexpr.c ((mp) or (ex)).  Each handler then declares
+       only the prefix it actually uses, which is legal only because "()"
+       means "unspecified" before C23.  Measured over 222 distinct handler
+       functions:
 
-           makespecialproc    54 take no args, 1 takes (Meaning *, Stmt *)
+           makespecialproc    56 take no args, 1 takes (Meaning *, Stmt *)
            makestandardproc    1 takes no args, 29 take (Expr *)
            makespecialfunc    49 take no args
            makestandardfunc    3 take no args, 78 take (Expr *)
            makespecialvar      5 take no args
 
        So typing this properly is not five typedefs: it needs either an added
-       unused parameter on about 112 handlers, or per-arity constructors so
+       unused parameter on about 114 handlers, or per-arity constructors so
        each registration states its own shape.  scripts/handler-census.sh
        regenerates the table above; do not trust these numbers without it.
-       The two procedure call sites are in parse.c, in p_statement.
 
        Do NOT "fix" this by giving it a prototype: an empty parameter list here
        means "unspecified" only before C23, which is exactly why src/Makefile
        must select -std=gnu17.  Under C23 "()" means "(void)" and the tree does
        not build.  Repairing this properly means giving each handler shape its
-       own type; see "Modern compiler compatibility" in README.md, which has
-       the measured error count and the compilers it was measured on. */
+       own type.  "Modern compiler compatibility" in README.md has the error
+       count without -std=gnu17 and the compiler it was measured on. */
     struct S_expr *(*handler)();
     Strlist *comments;	       /* Comments associated with meaning */
 } Meaning;

@@ -6,13 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 p2c is a Pascal-to-C translator written by Dave Gillespie (1989-1993), licensed under GPL. It translates Pascal source files into C code, supporting multiple Pascal dialects (HP, Turbo/UCSD, VAX, Oregon Software, MPW, Sun/Berkeley, TI, Apollo) and partial Modula-2. The generated code and runtime library (p2clib.c, p2c.h) are not GPL-restricted.
 
-This repository is FranklinChen's fork combining v1.21alpha2 with Ubuntu/Debian patches and Tom Schneider's v2.01 changes.
+This repository is FranklinChen's fork: Gillespie's 1.21alpha2, the Ubuntu/Debian patches, Tom Schneider's 2.00-2.02 changes, and a 2026 round of fixes so it builds and its output compiles on current compilers. It is released as 2.02.1 and is **no longer maintained**; see the status note at the top of `README.md`. Every surviving upstream release is preserved on the `upstream` and `upstream-archives` branches (see Branches below).
 
 ## Build Commands
 
 ```bash
 # Build p2c and run example programs (from repo root)
 make test
+
+# Everything CI runs: make test, plus the strict-C23 check of generated output
+make check
 
 # Build and install to home/ directory (from repo root)
 make install
@@ -89,20 +92,28 @@ The codebase is ~41K lines of C in `src/`. The translation pipeline is:
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs on every push/PR to main:
+GitHub Actions (`.github/workflows/ci.yml`) runs on every push/PR to main, and
+can be run by hand (workflow_dispatch). There is deliberately no schedule.
 
 - **native**: `ubuntu-latest` and `macos-latest`, on their default toolchains.
-- **modern-gcc**: the `gcc:15` and `gcc:16` container images. These exist
-  because GCC 15 was the first release to default to C23, and neither
-  `ubuntu-latest` nor `macos-latest` does. Both stayed green for months while
-  p2c did not build on GCC 15 or 16 at all.
+- **modern-gcc**: the `gcc:15` and `gcc:16` container images. GCC 15 was the
+  first release to default to C23, under which p2c's own sources need
+  `-std=gnu17`.
+- **draft-c23**: `ubuntu-24.04` with GCC 12 and 13 and clang 16, which know C23
+  only as `-std=c2x` and all report the interim `__STDC_VERSION__` 202000L,
+  though only GCC 13 and clang 16 make `true` and `false` keywords. The
+  comment above those definitions in `src/p2c.h` explains why it includes
+  `<stdbool.h>` in that range; do not replace that with a version test.
 - **shellcheck**: lints the scripts at default severity.
+- **vendor-branches**: verifies the `upstream` tags and branch against the
+  archives on `upstream-archives`.
 
-The two build jobs run `make check`, which is `make test` plus
+The build jobs run `make check`, which is `make test` plus
 `scripts/check-c23-output.sh`. The script verifies p2c's *generated* C is valid
-strict ISO C23, links, and produces correct output, over all five examples.
+strict ISO C23 and links for all five examples, and runs the three that do not
+read stdin (fact, e, self) to check their output.
 That is a separate question from whether p2c itself compiles, and `make test`
-alone cannot answer it; see "Modern compiler compatibility" in `README.md`.
+alone cannot answer it.
 
 Run `make check` locally before pushing. It is the same command CI runs, so it
 predicts CI rather than approximating it. Use `make c23-check` alone to re-run
@@ -120,10 +131,10 @@ line and would otherwise drop the dialect selection silently. Emptying `STD` mak
 the build fail outright on GCC 15+, so treat it as a correctness precondition
 rather than a preference.
 
-Why a dialect flag rather than suppression, and what would actually fix the
-underlying design, is explained in "Modern compiler compatibility" in
-`README.md`. The code-level warning lives where it matters, on the `handler`
-field in `src/trans.h`: read that comment before touching it.
+Why a dialect flag rather than suppression is explained in "Modern compiler
+compatibility" in `README.md`. What would actually fix the underlying design
+is in the comment on the `handler` field in `src/trans.h`: read it before
+touching that field.
 
 Generated output is a separate matter, and two of its defaults produce code no
 current Linux toolchain accepts:
@@ -135,9 +146,10 @@ current Linux toolchain accepts:
 `src/sys.p2crc` are deliberately left alone so existing downstreams see no change
 in output; only their comments were corrected.
 
-Beware that neither defect reproduces on macOS: clang still declares `gets`, and
-`sbrk` arrives through another header there. Test on Linux, or in the `gcc:15`
-container, before believing a compiler claim.
+Beware that `gets()` hides on macOS, because Apple's libc still declares it.
+So did `trans.c`'s use of `sbrk()` before it included `<unistd.h>`: macOS
+supplied the declaration through another header, glibc does not. Test on
+Linux, or in the `gcc:15` container, before believing a compiler claim.
 
 ## Branches
 
